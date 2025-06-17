@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,13 +19,28 @@
       max-width: 500px;
       width: 100%;
     }
-    .heading {
-      font-size: 2.5em;
-      text-align: center;
-      margin-bottom: 40px;
-      font-weight: bold;
-      text-shadow: 2px 2px #000;
-    }
+    
+.site-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.site-header .logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.main-title {
+  font-size: 2.2em;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  text-shadow: 2px 2px #000;
+}
+
     .card {
       background-color: #222;
       border: 1px solid #444;
@@ -83,7 +99,12 @@
 </head>
 <body>
   <div class="container">
-    <div class="heading">Upcoming Shows</div>
+    
+<header class="site-header">
+  <img src="assets/mm_logo.png" alt="musicianmarcus Logo" class="logo">
+  <h1 class="main-title">Upcoming Shows</h1>
+</header>
+
     
     <div class="card">
       <div class="artist">Don Louis</div>
@@ -120,7 +141,7 @@
     <div class="card">
       <div class="artist">Don Louis</div>
       <div class="date">12 Jul</div>
-      <div class="venue">Country Concert 25</div>
+      <div class="venue">Country Concert 25'</div>
       <div class="location">Fort Loramie, OH</div>
       <div class="buttons"><a href="https://countryconcert.com/" target="_blank">Tickets</a></div>
     </div>
@@ -147,6 +168,14 @@
       <div class="venue">Way Out West Fest</div>
       <div class="location">El Paso, TX</div>
       <div class="buttons"><a href="https://epwayoutwest.com/" target="_blank">Tickets</a></div>
+    </div>
+    
+    <div class="card">
+      <div class="artist">AURA</div>
+      <div class="date">27 Sep</div>
+      <div class="venue">Exclusive Venue</div>
+      <div class="location">Fort Worth, TX</div>
+      <div class="buttons"><span>Private</span></div>
     </div>
     
     <div class="card">
