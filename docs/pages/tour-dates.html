@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tour Dates | Marcian Entertainment</title>
+  <link rel="icon" type="image/png" href="../assets/mm_logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .site-title {
+      font-family: 'Archivo', sans-serif;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+    .fade-section {
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+    .fade-section.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white scroll-smooth">
+  <header class="bg-gray-950 py-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <span class="site-title text-xl sm:text-2xl">Marcian Entertainment</span>
+      <nav class="space-x-6">
+        <a href="../index.html" class="text-white hover:text-indigo-400 font-medium">Home</a>
+        <a href="tour-dates.html" class="text-white hover:text-indigo-400 font-medium">Tour Dates</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="px-6 py-20 bg-gray-900 text-center fade-section visible">
+      <h2 class="text-3xl font-bold mb-4">Upcoming Shows</h2>
+      <div id="shows-list" class="flex flex-col gap-8 max-w-2xl mx-auto"></div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    async function fetchShows() {
+      const sheetUrl = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
+      const response = await fetch(sheetUrl);
+      const text = await response.text();
+      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+      return parsed.data;
+    }
+    function createShowCard(show) {
+      const showDate = parseShowDate(show.date);
+      const formattedDate = showDate.isValid() ? showDate.format('DD MMM') : show.date;
+      const location = `${show.city}, ${show.state}`;
+      if (show.link && show.link.trim() !== '') {
+        return `
+          <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <div class="text-indigo-400 font-semibold uppercase mb-2">${show.artist}</div>
+            <div class="text-2xl font-bold mb-1">${formattedDate}</div>
+            <div class="font-semibold mb-1">${show.venue}</div>
+            <div class="text-gray-400 mb-4">${location}</div>
+            <a href="${show.link}" target="_blank" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded font-semibold inline-block">Tickets</a>
+          </div>
+        `;
+      } else {
+        const label = show.label || 'Free!';
+        return `
+          <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <div class="text-indigo-400 font-semibold uppercase mb-2">${show.artist}</div>
+            <div class="text-2xl font-bold mb-1">${formattedDate}</div>
+            <div class="font-semibold mb-1">${show.venue}</div>
+            <div class="text-gray-400 mb-4">${location}</div>
+            <span class="bg-gray-700 text-white px-4 py-2 rounded font-semibold opacity-60 cursor-default border border-dashed inline-block">${label}</span>
+          </div>
+        `;
+      }
+    }
+    function parseShowDate(dateStr) {
+      return dayjs(`${dateStr} ${dayjs().year()}`, 'DD MMM YYYY');
+    }
+    fetchShows().then(shows => {
+      const today = dayjs();
+      const upcoming = shows.filter(show => {
+        const showDate = parseShowDate(show.date);
+        return showDate.isValid() && showDate > today;
+      });
+      upcoming.sort((a, b) => {
+        const dateA = parseShowDate(a.date);
+        const dateB = parseShowDate(b.date);
+        return dateA - dateB;
+      });
+      const container = document.getElementById('shows-list');
+      container.innerHTML = upcoming.map(createShowCard).join('');
+    });
+  </script>
+</body>
+</html>

@@ -1,205 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MM Tour Dates</title>
-  <link rel="icon" type="image/png" href="assets/mm_logo.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marcian Entertainment</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #1a1a1a;
-      font-family: 'Helvetica Neue', sans-serif;
-      color: #fff;
-      margin: 0;
-      padding: 40px 20px;
-      display: flex;
-      justify-content: center;
+      font-family: 'Poppins', sans-serif;
     }
-    .container {
-      max-width: 500px;
-      width: 100%;
-    }
-    
-.site-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.site-header .logo {
-  width: 160px;
-  height: auto;
-  margin-bottom: 15px;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
-}
-
-.main-title {
-  font-size: 2.2em;
-  color: #fff;
-  text-transform: none;
-  margin: 0;
-  text-shadow: 2px 2px #000;
-}
-
-    .card {
-      background-color: #222;
-      border: 1px solid #444;
-      border-radius: 12px;
-      padding: 30px;
-      margin-bottom: 30px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
-    .artist {
-      font-size: 1em;
-      font-weight: bold;
-      letter-spacing: 1px;
+    .site-title {
+      font-family: 'Archivo', sans-serif;
       text-transform: uppercase;
-      color: #bbb;
-      margin-bottom: 10px;
+      font-weight: 900;
     }
-    .date {
-      font-size: 2em;
-      font-weight: bold;
-      margin-bottom: 10px;
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(20px);
     }
-    .venue {
-      font-size: 1.2em;
-      font-weight: 500;
+    .fade-in-up.show {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.6s ease-out;
     }
-    .location {
-      font-size: 1.1em;
-      margin-bottom: 30px;
-      color: #ccc;
+    .fade-section {
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
     }
-    .buttons {
-      display: flex;
-      justify-content: center;
-    }
-    .buttons a,
-    .buttons span {
-      text-decoration: none;
-      color: #fff;
-      border: 2px solid #fff;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    .buttons a:hover {
-      background-color: #fff;
-      color: #000;
-    }
-    .buttons span {
-      opacity: 0.5;
-      cursor: default;
-      background-color: transparent;
-      border-style: dashed;
+    .fade-section.visible {
+      opacity: 1;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    
-<header class="site-header">
-  <img src="assets/mm_logo.png" alt="musicianmarcus Logo" class="logo">
-  <h1 class="main-title">Upcoming Shows</h1>
-</header>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">06 Aug</div>
-      <div class="venue">Musikfest</div>
-      <div class="location">Bethlehem, PA</div>
-      <div class="buttons"><a href="https://www.musikfest.org/" target="_blank">Tickets</a></div>
+<body class="bg-gray-900 text-white scroll-smooth">
+  <!-- Navbar -->
+  <header class="bg-gray-950 py-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <span class="site-title text-xl sm:text-2xl">Marcian Entertainment</span>
+      <nav class="space-x-6">
+        <a href="#" class="text-white hover:text-indigo-400 font-medium">Home</a>
+        <a href="pages/tour-dates.html" class="text-white hover:text-indigo-400 font-medium">Tour Dates</a>
+      </nav>
     </div>
-
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">23 Aug</div>
-      <div class="venue">Hard Rock Hotel And Casino Tulsa</div>
-      <div class="location">Catoosa, OK</div>
-      <div class="buttons"><span>Free!</span></div>
+  </header>
+  <!-- Hero Section -->
+  <section class="min-h-screen flex flex-col justify-center items-center px-6 text-center">
+    <h1 class="site-title text-4xl sm:text-6xl mb-4 fade-in-up">
+      Marcian Entertainment
+    </h1>
+    <p class="text-lg sm:text-xl max-w-xl text-gray-300 mb-6 fade-in-up">
+      Providing soulful, professional performances for weddings, private events, and luxury experiences.
+    </p>
+    <a href="#services" class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold fade-in-up">
+      Learn More
+    </a>
+  </section>
+  <!-- Services Section -->
+  <section id="services" class="py-20 px-6 bg-gray-800 text-center">
+    <h2 class="text-3xl font-bold mb-6">Services</h2>
+    <p class="text-gray-400 max-w-2xl mx-auto mb-12">
+      Whether it's an intimate wedding, upscale corporate gathering, or a luxury private event, I tailor every performance to enhance the atmosphere and leave a lasting impression.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <div class="bg-gray-700 rounded-lg p-6 shadow-lg">
+        <h3 class="text-xl font-semibold mb-2">Wedding Ceremonies</h3>
+        <p class="text-gray-300">Elegant live guitar for the aisle walk, cocktail hour, or first dance.</p>
+      </div>
+      <div class="bg-gray-700 rounded-lg p-6 shadow-lg">
+        <h3 class="text-xl font-semibold mb-2">Private Events</h3>
+        <p class="text-gray-300">From backyard parties to luxury dinners, live music that fits the vibe.</p>
+      </div>
+      <div class="bg-gray-700 rounded-lg p-6 shadow-lg">
+        <h3 class="text-xl font-semibold mb-2">Corporate Functions</h3>
+        <p class="text-gray-300">Sophisticated background music to enhance your brand experience.</p>
+      </div>
     </div>
-
-    <div class="card">
-      <div class="artist">Stephen Cue</div>
-      <div class="date">31 Aug</div>
-      <div class="venue">Blues On Main Festival 2025</div>
-      <div class="location">Ennis, TX</div>
-      <div class="buttons"><span>Free!</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">27 Sep</div>
-      <div class="venue">Way Out West Fest</div>
-      <div class="location">El Paso, TX</div>
-      <div class="buttons"><a href="https://epwayoutwest.com/" target="_blank">Tickets</a></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">02 Oct</div>
-      <div class="venue">Southbound Bar & Grill</div>
-      <div class="location">Springfield, MO</div>
-      <div class="buttons"><a href="https://www.southboundbar.com/" target="_blank">Tickets</a></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">04 Oct</div>
-      <div class="venue">Silver Saloon</div>
-      <div class="location">Terrell, TX</div>
-      <div class="buttons"><a href="https://www.silversaloonterrell.com/" target="_blank">Tickets</a></div>
-    </div>
-
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">10 Oct</div>
-      <div class="venue">Cherokee Casino</div>
-      <div class="location">Roland, OK</div>
-      <div class="buttons"><span>Free!</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">11 Oct</div>
-      <div class="venue">Hard Rock Hotel And Casino Tulsa</div>
-      <div class="location">Catoosa, OK</div>
-      <div class="buttons"><span>Free!</span></div>
-    </div>
-
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">19 Oct</div>
-      <div class="venue">Exclusive Venue</div>
-      <div class="location">McKinney, TX</div>
-      <div class="buttons"><span>Private</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">08 Nov</div>
-      <div class="venue">Exclusive Venue</div>
-      <div class="location">Boston, MA</div>
-      <div class="buttons"><span>Private</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">21 Nov</div>
-      <div class="venue">Exclusive Venue</div>
-      <div class="location">Dallas, TX</div>
-      <div class="buttons"><span>Private</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">12 Dec</div>
-      <div class="venue">Exclusive Venue</div>
-      <div class="location">Frisco, TX</div>
-      <div class="buttons"><span>Private</span></div>
-    </div>
-    
-  </div>
+  </section>
+  <!-- Contact Section -->
+  <section id="contact" class="px-6 py-20 bg-gray-900 text-center">
+    <h2 class="text-2xl font-bold mb-4">Contact</h2>
+    <p class="text-gray-400 mb-6">Reach out to discuss your event and availability.</p>
+    <form action="https://formspree.io/f/your-form-id" method="POST" class="flex flex-col space-y-4 max-w-md mx-auto">
+      <input name="name" required placeholder="Your Name" class="px-4 py-2 rounded bg-gray-700 text-white placeholder-gray-400" />
+      <input name="email" type="email" required placeholder="Email" class="px-4 py-2 rounded bg-gray-700 text-white placeholder-gray-400" />
+      <textarea name="message" required placeholder="Message" rows="4" class="px-4 py-2 rounded bg-gray-700 text-white placeholder-gray-400"></textarea>
+      <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-xl font-semibold">
+        Send Message
+      </button>
+    </form>
+  </section>
+  <script>
+    // Animate fade-in on load
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.fade-in-up').forEach((el, i) => {
+        setTimeout(() => {
+          el.classList.add('show');
+        }, i * 150 + 300);
+      });
+    });
+  </script>
 </body>
 </html>
