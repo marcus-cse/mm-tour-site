@@ -6,10 +6,10 @@
   <title>Tour Dates | Marcian Entertainment</title>
   <link rel="icon" type="image/png" href="../assets/mm_logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
     }
     .site-title {
       font-family: 'Archivo', sans-serif;
@@ -23,21 +23,49 @@
     .fade-section.visible {
       opacity: 1;
     }
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .fade-in-up.show {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes spin-slow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: spin-slow 1.2s linear infinite;
+    }
   </style>
 </head>
-<body class="bg-gray-900 text-white scroll-smooth">
-  <header class="bg-gray-950 py-4 shadow-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-      <span class="site-title text-xl sm:text-2xl">Marcian Entertainment</span>
-      <nav class="space-x-6">
-        <a href="../index.html" class="text-white hover:text-indigo-400 font-medium">Home</a>
-        <a href="tour-dates.html" class="text-white hover:text-indigo-400 font-medium">Tour Dates</a>
+<body class="bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 text-white scroll-smooth">
+  <!-- Loading Spinner Overlay -->
+  <div id="loading-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-500">
+    <div class="flex flex-col items-center">
+      <!-- Symmetrical Single-Ring Spinner -->
+      <svg class="h-16 w-16 animate-spin-slow" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="20" stroke="#6366f1" stroke-width="6" fill="none" stroke-dasharray="94" stroke-dashoffset="24"/>
+      </svg>
+      <span class="mt-6 text-lg font-semibold text-white/80 tracking-wide">Loading Tour Dates...</span>
+    </div>
+  </div>
+  <header class="bg-gray-950/80 backdrop-blur-md py-6 shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-8 flex justify-between items-center">
+      <span class="site-title text-2xl sm:text-3xl tracking-wide drop-shadow-lg">Marcian Entertainment</span>
+      <nav class="flex gap-8 whitespace-nowrap">
+        <a href="../index.html" class="text-white/80 hover:text-indigo-400 font-semibold transition-colors duration-200">Home</a>
+        <a href="tour-dates.html" class="text-white/80 hover:text-indigo-400 font-semibold transition-colors duration-200">Tour Dates</a>
       </nav>
     </div>
   </header>
-  <main>
-    <section class="px-6 py-20 bg-gray-900 text-center fade-section visible">
-      <h2 class="text-3xl font-bold mb-4">Upcoming Shows</h2>
+  <main id="main-content" style="opacity:0; pointer-events:none;">
+    <section class="px-6 py-10 text-center fade-section visible max-w-4xl mx-auto mt-6">
+      <h2 class="text-3xl font-bold mb-8 tracking-tight">Upcoming Shows</h2>
       <div id="shows-list" class="flex flex-col gap-8 max-w-2xl mx-auto"></div>
     </section>
   </main>
@@ -55,25 +83,26 @@
       const showDate = parseShowDate(show.date);
       const formattedDate = showDate.isValid() ? showDate.format('DD MMM') : show.date;
       const location = `${show.city}, ${show.state}`;
-      if (show.link && show.link.trim() !== '') {
+      if (show.ticket_url && show.ticket_url.trim() !== '') {
         return `
-          <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
-            <div class="text-indigo-400 font-semibold uppercase mb-2">${show.artist}</div>
+          <div class="bg-gray-800/80 rounded-2xl p-8 shadow-xl hover:scale-105 transition-transform duration-200 fade-in-up w-[350px] mx-auto">
+            <div class="text-indigo-400 font-extrabold uppercase mb-2">${show.artist}</div>
             <div class="text-2xl font-bold mb-1">${formattedDate}</div>
             <div class="font-semibold mb-1">${show.venue}</div>
             <div class="text-gray-400 mb-4">${location}</div>
-            <a href="${show.link}" target="_blank" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded font-semibold inline-block">Tickets</a>
+            <a href="${show.ticket_url}" target="_blank" class="bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg inline-block transition-all duration-200">Tickets</a>
           </div>
         `;
       } else {
-        const label = show.label || 'Free!';
+        const isPublic = String(show.is_public).toLowerCase() === 'true';
+        const label = isPublic ? 'Free!' : 'Private';
         return `
-          <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
-            <div class="text-indigo-400 font-semibold uppercase mb-2">${show.artist}</div>
+          <div class="bg-gray-800/80 rounded-2xl p-8 shadow-xl hover:scale-105 transition-transform duration-200 fade-in-up w-[350px] mx-auto">
+            <div class="text-indigo-400 font-extrabold uppercase mb-2">${show.artist}</div>
             <div class="text-2xl font-bold mb-1">${formattedDate}</div>
             <div class="font-semibold mb-1">${show.venue}</div>
             <div class="text-gray-400 mb-4">${location}</div>
-            <span class="bg-gray-700 text-white px-4 py-2 rounded font-semibold opacity-60 cursor-default border border-dashed inline-block">${label}</span>
+            <span class="bg-gray-700 text-white px-6 py-3 rounded-2xl font-semibold opacity-60 cursor-default border border-dashed inline-block">${label}</span>
           </div>
         `;
       }
@@ -81,19 +110,37 @@
     function parseShowDate(dateStr) {
       return dayjs(`${dateStr} ${dayjs().year()}`, 'DD MMM YYYY');
     }
-    fetchShows().then(shows => {
-      const today = dayjs();
-      const upcoming = shows.filter(show => {
-        const showDate = parseShowDate(show.date);
-        return showDate.isValid() && showDate > today;
+    // Show spinner until data loads
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('loading-overlay');
+      const mainContent = document.getElementById('main-content');
+      fetchShows().then(shows => {
+        const today = dayjs();
+        const upcoming = shows.filter(show => {
+          const showDate = parseShowDate(show.date);
+          return showDate.isValid() && showDate > today;
+        });
+        upcoming.sort((a, b) => {
+          const dateA = parseShowDate(a.date);
+          const dateB = parseShowDate(b.date);
+          return dateA - dateB;
+        });
+        const container = document.getElementById('shows-list');
+        container.innerHTML = upcoming.map(createShowCard).join('');
+        // Fade in cards staggered
+        const cards = container.querySelectorAll('.fade-in-up');
+        cards.forEach((card, i) => {
+          setTimeout(() => {
+            card.classList.add('show');
+          }, i * 150 + 300);
+        });
+        overlay.style.opacity = 0;
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          mainContent.style.opacity = 1;
+          mainContent.style.pointerEvents = 'auto';
+        }, 500);
       });
-      upcoming.sort((a, b) => {
-        const dateA = parseShowDate(a.date);
-        const dateB = parseShowDate(b.date);
-        return dateA - dateB;
-      });
-      const container = document.getElementById('shows-list');
-      container.innerHTML = upcoming.map(createShowCard).join('');
     });
   </script>
 </body>
