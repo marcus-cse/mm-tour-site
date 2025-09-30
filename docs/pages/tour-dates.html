@@ -6,10 +6,10 @@
   <title>Tour Dates | Marcian Entertainment</title>
   <link rel="icon" type="image/png" href="../assets/mm_logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Satoshi', sans-serif;
     }
     .site-title {
       font-family: 'Archivo', sans-serif;
@@ -63,12 +63,10 @@
     </div>
   </div>
   <header class="bg-gray-950/80 backdrop-blur-md py-4 sm:py-6 shadow-lg sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
-      <span class="site-title text-xl sm:text-2xl md:text-3xl tracking-wide drop-shadow-lg mb-2 sm:mb-0 text-center sm:text-left">Marcian Entertainment</span>
-      <nav class="flex flex-row sm:flex-row gap-4 sm:gap-8 whitespace-nowrap justify-center sm:justify-end">
-        <a href="../index.html" class="text-white/80 hover:text-indigo-400 font-semibold transition-colors duration-200">Home</a>
-        <a href="tour-dates.html" class="text-white/80 hover:text-indigo-400 font-semibold transition-colors duration-200">Tour Dates</a>
-      </nav>
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 flex justify-start items-center">
+      <a href="../index.html" class="site-title text-xl sm:text-2xl md:text-3xl drop-shadow-lg text-left block focus:outline-none focus:ring-2 focus:ring-indigo-400" style="letter-spacing:0;">
+        <span style="position:relative;">M<span style="margin-left:-0.32em; position:relative; z-index:1;">M</span></span>
+      </a>
     </div>
   </header>
   <!-- Backdrop Overlay Image (full-width, full-height, responsive object-position) -->
@@ -77,7 +75,11 @@
   </div>
   <main id="main-content" style="opacity:0; pointer-events:none;">
     <section class="px-2 sm:px-6 py-8 sm:py-10 text-center fade-section visible max-w-4xl mx-auto mt-4 sm:mt-6">
-      <h2 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Upcoming Shows</h2>
+      <!-- KPI Card: Upcoming Shows Count (rectangular, glass, purple/blue, higher transparency, shorter width) -->
+      <div id="kpi-card" class="bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-md shadow-xl mb-8 mx-auto w-48 flex flex-col items-center justify-center py-6 px-4 border border-blue-300/30 fade-in-up" style="border-radius:0;">
+        <div class="text-5xl font-extrabold text-white drop-shadow-lg" id="kpi-count">0</div>
+        <div class="mt-2 text-lg font-semibold text-white/80 tracking-wide">Upcoming Shows</div>
+      </div>
       <div id="shows-list" class="flex flex-col gap-6 sm:gap-8 w-full max-w-xs sm:max-w-2xl mx-auto"></div>
     </section>
   </main>
@@ -137,14 +139,23 @@
           const dateB = parseShowDate(b.date);
           return dateA - dateB;
         });
+        // Update KPI card count
+        document.getElementById('kpi-count').textContent = upcoming.length;
         const container = document.getElementById('shows-list');
         container.innerHTML = upcoming.map(createShowCard).join('');
-        // Fade in cards staggered
-        const cards = container.querySelectorAll('.fade-in-up');
-        cards.forEach((card, i) => {
+        // Animate fade-in on load for KPI card and show cards
+        const kpiCard = document.getElementById('kpi-card');
+        if (kpiCard) {
           setTimeout(() => {
-            card.classList.add('show');
-          }, i * 150 + 300);
+            kpiCard.classList.add('show');
+          }, 300);
+        }
+        document.querySelectorAll('.fade-in-up').forEach((el, i) => {
+          if (el !== kpiCard) {
+            setTimeout(() => {
+              el.classList.add('show');
+            }, i * 150 + 450);
+          }
         });
         overlay.style.opacity = 0;
         setTimeout(() => {
