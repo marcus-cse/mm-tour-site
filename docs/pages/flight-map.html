@@ -40,7 +40,7 @@
       <!-- LEFT: title + stats + now playing -->
       <div class="tm-left">
         <div class="tm-eyebrow">
-          <span>FIELD GUIDE / 02</span>
+          <span>TOUR MAP</span>
           <span id="tm-season">2026 SEASON</span>
         </div>
 
@@ -156,12 +156,14 @@
     }
 
     function adaptShow(row) {
+      const hasTickets = (row.ticket_url || '').trim();
+      const isPublic   = String(row.is_public || '').toLowerCase() === 'true';
       return {
         date: (row.date || '').trim(),
         artist: (row.artist || '').trim(),
         venue: (row.venue || '').trim(),
         city: `${(row.city || '').trim()}, ${(row.state || '').trim()}`,
-        status: (row.ticket_url || '').trim() ? 'tickets' : 'private',
+        status: hasTickets ? 'tickets' : isPublic ? 'public' : 'private',
         lat: parseFloat(row.latitude),
         lng: parseFloat(row.longitude),
       };

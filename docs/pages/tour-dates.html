@@ -73,11 +73,11 @@
         <div class="gl-footer-cols">
           <div>
             <div class="gl-footer-label">CONTACT</div>
-            <div>booking@marcusmaldonado.com</div>
+            <div>marcus@marcian.live</div>
           </div>
           <div>
             <div class="gl-footer-label">FOLLOW</div>
-            <div>Instagram · YouTube</div>
+            <a href="https://www.instagram.com/musicianmarcus/" target="_blank" rel="noopener noreferrer">Instagram</a>
           </div>
         </div>
       </div>
@@ -114,21 +114,25 @@
     }
 
     function adaptShow(row) {
+      const hasTickets = (row.ticket_url || '').trim();
+      const isPublic   = String(row.is_public || '').toLowerCase() === 'true';
       return {
-        date: row.date,           // keep original "DD MMM" string; parseShowDate handles it
+        date: row.date,
         artist: (row.artist || '').trim(),
         venue: (row.venue || '').trim(),
         city: `${(row.city || '').trim()}, ${(row.state || '').trim()}`,
-        status: (row.ticket_url || '').trim() ? 'tickets' : 'private',
-        url: (row.ticket_url || '').trim() || null,
+        status: hasTickets ? 'tickets' : isPublic ? 'public' : 'private',
+        url: hasTickets || null,
       };
     }
 
     function rowHTML(show, globalIndex) {
       const isPrivate = show.status === 'private';
-      const ticketBtn = isPrivate
-        ? `<span class="gl-row-private">PRIVATE</span>`
-        : `<a href="${show.url}" target="_blank" rel="noopener" class="gl-row-tickets">Tickets →</a>`;
+      const ticketBtn = show.status === 'tickets'
+        ? `<a href="${show.url}" target="_blank" rel="noopener" class="gl-row-tickets">Tickets →</a>`
+        : show.status === 'public'
+        ? `<span class="gl-row-public">FREE</span>`
+        : `<span class="gl-row-private">PRIVATE</span>`;
 
       return `
         <article class="gl-row${isPrivate ? ' gl-row--private' : ''}">
