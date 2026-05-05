@@ -3,68 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Marcian Entertainment</title>
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Satoshi:wght@400;500;700&family=Work+Sans:wght@500;700&display=swap" rel="stylesheet">
+  <title>Marcus Maldonado — Guitarist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
   <style>
-    body {
-      font-family: 'Satoshi', sans-serif;
-    }
-    .site-title {
-      font-family: 'Archivo', sans-serif;
-      text-transform: uppercase;
-      font-weight: 900;
-    }
-    .fade-in-up {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    .fade-in-up.show {
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 0.6s ease-out;
-    }
-    .fade-section {
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-    }
-    .fade-section.visible {
-      opacity: 1;
-    }
+    html, body { height: 100%; overflow: hidden; }
+    .gl-root.gl-home-only { height: 100%; }
+    .gl-hero.gl-hero--full { height: 100%; min-height: 0; }
+    .gl-hero-now-val, .gl-hero-now-sub { transition: opacity 0.4s; }
   </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white scroll-smooth">
-  <!-- Navbar -->
-  <header class="bg-gray-950/80 backdrop-blur-md py-4 sm:py-6 shadow-lg sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 flex justify-start items-center">
-      <a href="index.html" class="site-title text-xl sm:text-2xl md:text-3xl drop-shadow-lg text-left block focus:outline-none focus:ring-2 focus:ring-indigo-400" style="letter-spacing:0;">
-        <span style="position:relative;">M<span style="margin-left:-0.32em; position:relative; z-index:1;">M</span></span>
-      </a>
-    </div>
-  </header>
-  <!-- Hero Section Only -->
-  <section class="min-h-screen flex flex-col justify-center items-center px-2 sm:px-6 text-center">
-    <h1 class="site-title text-4xl sm:text-5xl md:text-7xl mb-2 fade-in-up drop-shadow-xl">
-      Marcus Maldonado
-    </h1>
-    <p class="text-lg sm:text-xl md:text-2xl max-w-2xl text-gray-300 mb-8 fade-in-up font-light">
-      Providing soulful, professional performances for artists, weddings, and luxury experiences.
-    </p>
-    <a href="pages/tour-dates.html" class="bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-semibold shadow-lg transition-all duration-200 fade-in-up text-base sm:text-lg">
-      View Tour Dates
-    </a>
-  </section>
+<body>
+  <div class="gl-root gl-home-only">
+    <section class="gl-hero gl-hero--full">
+
+      <!-- Background photo + scrim -->
+      <div class="gl-hero-image">
+        <img src="assets/mm-backdrop.jpg" alt="Marcus Maldonado on stage" class="gl-hero-img" />
+        <div class="gl-hero-scrim"></div>
+      </div>
+
+      <!-- Nav -->
+      <header class="gl-nav">
+        <a href="index.html" class="gl-mark">MM</a>
+        <nav>
+          <a href="pages/tour-dates.html">Tour</a>
+          <a href="pages/flight-map.html">Map</a>
+          <a href="pages/about.html">About</a>
+        </nav>
+        <a href="pages/booking.html" class="gl-nav-cta">Inquire</a>
+      </header>
+
+      <!-- Hero text -->
+      <div class="gl-hero-text">
+        <div class="gl-hero-eyebrow">
+          <span>GUITARIST · TEXAS</span>
+        </div>
+        <h1 class="gl-hero-title"><span style="display:block;margin-bottom:0.12em">MARCUS</span>MALDONADO</h1>
+        <p class="gl-hero-tag-line">
+          Soulful, professional guitar performances<br>
+          for artists, weddings, and luxury experiences.
+        </p>
+      </div>
+
+      <!-- Footer strip -->
+      <div class="gl-hero-foot">
+        <div class="gl-hero-foot-l">
+          <a href="pages/tour-dates.html" class="gl-hero-link">
+            <span class="gl-hero-link-num">01</span>
+            <span>VIEW TOUR DATES</span>
+            <span>→</span>
+          </a>
+          <a href="pages/booking.html" class="gl-hero-link">
+            <span class="gl-hero-link-num">02</span>
+            <span>BOOK A DATE</span>
+            <span>→</span>
+          </a>
+        </div>
+        <div class="gl-hero-now">
+          <div class="gl-hero-now-label">NEXT SHOW</div>
+          <div class="gl-hero-now-val" id="next-show-val">—</div>
+          <div class="gl-hero-now-sub" id="next-show-sub" style="font-size:12px;opacity:0.7;margin-top:4px;">Loading…</div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
-    // Animate fade-in on load
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.fade-in-up').forEach((el, i) => {
-        setTimeout(() => {
-          el.classList.add('show');
-        }, i * 150 + 300);
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
+
+    function parseShowDate(dateStr) {
+      return dayjs(`${dateStr} ${dayjs().year()}`);
+    }
+
+    const fmtDay   = d => parseShowDate(d).format('DD');
+    const fmtMonth = d => parseShowDate(d).format('MMM').toUpperCase();
+
+    fetch(SHEET_URL)
+      .then(r => r.text())
+      .then(text => {
+        const rows = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
+        const today = dayjs();
+        const shows = rows
+          .filter(r => r.date)
+          .map(r => ({
+            date: r.date,
+            artist: (r.artist || '').trim(),
+            venue: (r.venue || '').trim(),
+            city: `${(r.city || '').trim()}, ${(r.state || '').trim()}`,
+            status: (r.ticket_url || '').trim() ? 'tickets' : 'private',
+          }))
+          .filter(s => parseShowDate(s.date).isValid() && parseShowDate(s.date) >= today)
+          .sort((a, b) => parseShowDate(a.date) - parseShowDate(b.date));
+
+        const next = shows[0];
+        if (next) {
+          document.getElementById('next-show-val').textContent =
+            `${fmtMonth(next.date)} ${fmtDay(next.date)} · ${next.artist}`;
+          document.getElementById('next-show-sub').textContent =
+            next.status === 'private' ? 'Private engagement' : `${next.venue} — ${next.city}`;
+        } else {
+          document.getElementById('next-show-val').textContent = 'TBA';
+          document.getElementById('next-show-sub').textContent = 'Stay tuned';
+        }
+      })
+      .catch(() => {
+        document.getElementById('next-show-sub').textContent = '';
       });
-    });
   </script>
 </body>
 </html>

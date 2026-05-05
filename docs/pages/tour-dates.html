@@ -3,168 +3,232 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tour Dates | Marcian Entertainment</title>
+  <title>Tour Dates — Marcus Maldonado</title>
   <link rel="icon" type="image/png" href="../assets/mm_logo.png" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
   <style>
-    body {
-      font-family: 'Satoshi', sans-serif;
+    .gl-root.gl-page { min-height: 100vh; }
+    /* Loading skeleton */
+    .gl-loading {
+      padding: 96px 48px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
     }
-    .site-title {
-      font-family: 'Archivo', sans-serif;
-      text-transform: uppercase;
-      font-weight: 900;
-    }
-    .fade-section {
-      opacity: 0;
-      transition: opacity 0.8s ease-in-out;
-    }
-    .fade-section.visible {
-      opacity: 1;
-    }
-    .fade-in-up {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    .fade-in-up.show {
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
-    }
-    @keyframes spin-slow {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .animate-spin-slow {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: spin-slow 1.2s linear infinite;
-    }
-    .responsive-backdrop-pos {
-      object-position: center top 120px;
-    }
-    @media (min-width: 1024px) {
-      .responsive-backdrop-pos {
-        object-position: center top 220px;
-      }
-    }
+    /* Filter active */
+    .gl-filter.is-active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    /* Sticky nav on inner pages */
+    .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
   </style>
 </head>
-<body class="bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 text-white scroll-smooth relative">
-  <!-- Loading Spinner Overlay -->
-  <div id="loading-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-500">
-    <div class="flex flex-col items-center">
-      <!-- Symmetrical Single-Ring Spinner -->
-      <svg class="h-16 w-16 animate-spin-slow" viewBox="0 0 50 50">
-        <circle cx="25" cy="25" r="20" stroke="#6366f1" stroke-width="6" fill="none" stroke-dasharray="94" stroke-dashoffset="24"/>
-      </svg>
-      <span class="mt-6 text-lg font-semibold text-white/80 tracking-wide">Loading Tour Dates...</span>
-    </div>
-  </div>
-  <header class="bg-gray-950/80 backdrop-blur-md py-4 sm:py-6 shadow-lg sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 flex justify-start items-center">
-      <a href="../index.html" class="site-title text-xl sm:text-2xl md:text-3xl drop-shadow-lg text-left block focus:outline-none focus:ring-2 focus:ring-indigo-400" style="letter-spacing:0;">
-        <span style="position:relative;">M<span style="margin-left:-0.32em; position:relative; z-index:1;">M</span></span>
-      </a>
-    </div>
-  </header>
-  <!-- Backdrop Overlay Image (full-width, full-height, responsive object-position) -->
-  <div class="fixed left-0 right-0 z-0 pointer-events-none select-none" style="top:64px; bottom:0;">
-    <img src="../assets/mm_backdrop.jpg" alt="Backdrop" class="w-full h-full object-cover opacity-30 responsive-backdrop-pos" />
-  </div>
-  <main id="main-content" style="opacity:0; pointer-events:none;">
-    <section class="px-2 sm:px-6 py-8 sm:py-10 text-center fade-section visible max-w-4xl mx-auto mt-4 sm:mt-6">
-      <!-- KPI Card: Upcoming Shows Count (rectangular, glass, purple/blue, higher transparency, shorter width) -->
-      <div id="kpi-card" class="bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-md shadow-xl mb-8 mx-auto w-48 flex flex-col items-center justify-center py-6 px-4 border border-blue-300/30 fade-in-up" style="border-radius:0;">
-        <div class="text-5xl font-extrabold text-white drop-shadow-lg" id="kpi-count">0</div>
-        <div class="mt-2 text-lg font-semibold text-white/80 tracking-wide">Upcoming Shows</div>
+<body>
+  <div class="gl-root gl-page">
+
+    <!-- Nav -->
+    <header class="gl-nav gl-nav--page">
+      <a href="../index.html" class="gl-mark">MM</a>
+      <nav>
+        <a href="tour-dates.html" class="is-current">Tour</a>
+        <a href="flight-map.html">Map</a>
+        <a href="about.html">About</a>
+      </nav>
+      <a href="booking.html" class="gl-nav-cta">Inquire</a>
+    </header>
+
+    <!-- Stats strip (populated by JS) -->
+    <section class="gl-stat-strip gl-stat-strip--top" id="stats-strip">
+      <div class="gl-stat">
+        <div class="gl-stat-num gl-mono" id="stat-total">—</div>
+        <div class="gl-mono gl-stat-label">SHOWS</div>
       </div>
-      <div id="shows-list" class="flex flex-col gap-6 sm:gap-8 w-full max-w-xs sm:max-w-2xl mx-auto"></div>
+      <div class="gl-stat">
+        <div class="gl-stat-num gl-mono" id="stat-regions">—</div>
+        <div class="gl-mono gl-stat-label">CITIES</div>
+      </div>
+      <div class="gl-stat">
+        <div class="gl-stat-num gl-mono" id="stat-acts">—</div>
+        <div class="gl-mono gl-stat-label">ACTS</div>
+      </div>
     </section>
-  </main>
+
+    <!-- Filter bar (populated by JS) -->
+    <section class="gl-tour-page-filters" id="filter-bar">
+      <div class="gl-mono gl-filter-eyebrow">FILTER BY ARTIST</div>
+      <div class="gl-filters" id="filter-buttons">
+        <div class="gl-mono" style="color:var(--muted);">Loading…</div>
+      </div>
+    </section>
+
+    <!-- Grouped show list (populated by JS) -->
+    <section class="gl-tour-grouped" id="tour-grouped">
+      <div class="gl-loading">LOADING TOUR DATES…</div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gl-footer">
+      <div class="gl-footer-top">
+        <div class="gl-footer-mark">MM</div>
+        <div class="gl-footer-cols">
+          <div>
+            <div class="gl-footer-label">CONTACT</div>
+            <div>booking@marcusmaldonado.com</div>
+          </div>
+          <div>
+            <div class="gl-footer-label">FOLLOW</div>
+            <div>Instagram · YouTube</div>
+          </div>
+        </div>
+      </div>
+      <div class="gl-footer-bot">
+        <span>© <span id="footer-year"></span> MARCUS MALDONADO</span>
+        <span>BUILT IN TEXAS</span>
+      </div>
+    </footer>
+
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
+
+    // Exact same pattern as the working showData.js
+    function parseShowDate(dateStr) {
+      return dayjs(`${dateStr} ${dayjs().year()}`);
+    }
+
+    function fmtDay(d)       { return parseShowDate(d).format('DD'); }
+    function fmtMonth(d)     { return parseShowDate(d).format('MMM').toUpperCase(); }
+    function fmtWeek(d)      { return parseShowDate(d).format('ddd').toUpperCase(); }
+    function fmtMonthYear(d) { return parseShowDate(d).format('MMMM YYYY').toUpperCase(); }
+
     async function fetchShows() {
-      const sheetUrl = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
-      const response = await fetch(sheetUrl);
+      const response = await fetch(SHEET_URL);
       const text = await response.text();
       const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
       return parsed.data;
     }
-    function createShowCard(show) {
-      const showDate = parseShowDate(show.date);
-      const formattedDate = showDate.isValid() ? showDate.format('DD MMM') : show.date;
-      const location = `${show.city}, ${show.state}`;
-      if (show.ticket_url && show.ticket_url.trim() !== '') {
-        return `
-          <div class="bg-gray-800/80 rounded-2xl p-4 sm:p-8 shadow-xl hover:scale-105 transition-transform duration-200 fade-in-up w-full max-w-xs sm:max-w-[350px] mx-auto">
-            <div class="text-indigo-400 font-extrabold uppercase mb-2 text-base sm:text-lg">${show.artist}</div>
-            <div class="text-xl sm:text-2xl font-bold mb-1">${formattedDate}</div>
-            <div class="font-semibold mb-1 text-base sm:text-lg">${show.venue}</div>
-            <div class="text-gray-400 mb-4 text-sm sm:text-base">${location}</div>
-            <a href="${show.ticket_url}" target="_blank" class="bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-semibold shadow-lg inline-block transition-all duration-200 text-base sm:text-lg">Tickets</a>
-          </div>
-        `;
-      } else {
-        const isPublic = String(show.is_public).toLowerCase() === 'true';
-        const label = isPublic ? 'Free!' : 'Private';
-        return `
-          <div class="bg-gray-800/80 rounded-2xl p-4 sm:p-8 shadow-xl hover:scale-105 transition-transform duration-200 fade-in-up w-full max-w-xs sm:max-w-[350px] mx-auto">
-            <div class="text-indigo-400 font-extrabold uppercase mb-2 text-base sm:text-lg">${show.artist}</div>
-            <div class="text-xl sm:text-2xl font-bold mb-1">${formattedDate}</div>
-            <div class="font-semibold mb-1 text-base sm:text-lg">${show.venue}</div>
-            <div class="text-gray-400 mb-4 text-sm sm:text-base">${location}</div>
-            <span class="bg-gray-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-semibold opacity-60 cursor-default border border-dashed inline-block text-base sm:text-lg">${label}</span>
-          </div>
-        `;
-      }
+
+    function adaptShow(row) {
+      return {
+        date: row.date,           // keep original "DD MMM" string; parseShowDate handles it
+        artist: (row.artist || '').trim(),
+        venue: (row.venue || '').trim(),
+        city: `${(row.city || '').trim()}, ${(row.state || '').trim()}`,
+        status: (row.ticket_url || '').trim() ? 'tickets' : 'private',
+        url: (row.ticket_url || '').trim() || null,
+      };
     }
-    function parseShowDate(dateStr) {
-      return dayjs(`${dateStr} ${dayjs().year()}`, 'DD MMM YYYY');
+
+    function rowHTML(show, globalIndex) {
+      const isPrivate = show.status === 'private';
+      const ticketBtn = isPrivate
+        ? `<span class="gl-row-private">PRIVATE</span>`
+        : `<a href="${show.url}" target="_blank" rel="noopener" class="gl-row-tickets">Tickets →</a>`;
+
+      return `
+        <article class="gl-row${isPrivate ? ' gl-row--private' : ''}">
+          <div class="gl-row-i">${String(globalIndex + 1).padStart(2, '0')}</div>
+          <div class="gl-row-date">
+            <div class="gl-row-day">${fmtDay(show.date)}</div>
+            <div class="gl-row-mo">${fmtMonth(show.date)}</div>
+          </div>
+          <div class="gl-row-week">${fmtWeek(show.date)}</div>
+          <div class="gl-row-venue">
+            <div class="gl-row-name">${isPrivate ? 'Private Engagement' : show.venue}</div>
+            <div class="gl-row-city">${isPrivate ? 'Details on request' : show.city}</div>
+          </div>
+          <div class="gl-row-artist">${show.artist}</div>
+          <div class="gl-row-cta">${ticketBtn}</div>
+        </article>`;
     }
-    // Show spinner until data loads
-    document.addEventListener('DOMContentLoaded', () => {
-      const overlay = document.getElementById('loading-overlay');
-      const mainContent = document.getElementById('main-content');
-      fetchShows().then(shows => {
-        const today = dayjs();
-        const upcoming = shows.filter(show => {
-          const showDate = parseShowDate(show.date);
-          return showDate.isValid(); // && showDate > today;
-        });
-        upcoming.sort((a, b) => {
-          const dateA = parseShowDate(a.date);
-          const dateB = parseShowDate(b.date);
-          return dateA - dateB;
-        });
-        // Update KPI card count
-        document.getElementById('kpi-count').textContent = upcoming.length;
-        const container = document.getElementById('shows-list');
-        container.innerHTML = upcoming.map(createShowCard).join('');
-        // Animate fade-in on load for KPI card and show cards
-        const kpiCard = document.getElementById('kpi-card');
-        if (kpiCard) {
-          setTimeout(() => {
-            kpiCard.classList.add('show');
-          }, 300);
-        }
-        document.querySelectorAll('.fade-in-up').forEach((el, i) => {
-          if (el !== kpiCard) {
-            setTimeout(() => {
-              el.classList.add('show');
-            }, i * 150 + 450);
-          }
-        });
-        overlay.style.opacity = 0;
-        setTimeout(() => {
-          overlay.style.display = 'none';
-          mainContent.style.opacity = 1;
-          mainContent.style.pointerEvents = 'auto';
-        }, 500);
+
+    function groupByMonth(shows) {
+      const groups = {};
+      shows.forEach(show => {
+        const key = fmtMonthYear(show.date);
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(show);
       });
-    });
+      return groups;
+    }
+
+    function renderGrouped(shows, allShows) {
+      const grouped = groupByMonth(shows);
+      const container = document.getElementById('tour-grouped');
+
+      if (Object.keys(grouped).length === 0) {
+        container.innerHTML = '<div class="gl-empty">No shows match this filter.</div>';
+        return;
+      }
+
+      container.innerHTML = Object.entries(grouped).map(([month, monthShows]) => {
+        const rows = monthShows.map(show => rowHTML(show, allShows.indexOf(show))).join('');
+        return `
+          <div class="gl-month">
+            <div class="gl-month-head">
+              <h2 class="gl-month-title">${month}</h2>
+              <div class="gl-mono gl-month-count">${monthShows.length} ${monthShows.length === 1 ? 'SHOW' : 'SHOWS'}</div>
+            </div>
+            <div class="gl-tour-list gl-tour-list--page">${rows}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderFilters(artists, activeFilter, allShows) {
+      const btns = document.getElementById('filter-buttons');
+      const allArtists = ['All', ...artists];
+      btns.innerHTML = allArtists.map(a => {
+        const count = a === 'All' ? allShows.length : allShows.filter(s => s.artist === a).length;
+        const isActive = a === activeFilter;
+        return `
+          <button class="gl-filter${isActive ? ' is-active' : ''}" data-artist="${a}">
+            ${a}
+            <span class="gl-filter-count">${count}</span>
+          </button>`;
+      }).join('');
+
+      btns.querySelectorAll('.gl-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const artist = btn.dataset.artist;
+          const visible = artist === 'All' ? allShows : allShows.filter(s => s.artist === artist);
+          renderFilters(artists, artist, allShows);
+          renderGrouped(visible, allShows);
+        });
+      });
+    }
+
+    fetchShows().then(rows => {
+        const today = dayjs();
+        const allShows = rows
+          .map(adaptShow)
+          .filter(s => s.date && parseShowDate(s.date).isValid() && parseShowDate(s.date) >= today)
+          .sort((a, b) => parseShowDate(a.date) - parseShowDate(b.date));
+
+        // Stats
+        const cities = new Set(allShows.map(s => s.city)).size;
+        const acts   = new Set(allShows.map(s => s.artist)).size;
+
+        document.getElementById('stat-total').textContent   = allShows.length;
+        document.getElementById('stat-regions').textContent = cities;
+        document.getElementById('stat-acts').textContent    = acts;
+
+        // Filters
+        const artists = [...new Set(allShows.map(s => s.artist))];
+        renderFilters(artists, 'All', allShows);
+
+        // Shows
+        renderGrouped(allShows, allShows);
+      })
+      .catch(err => {
+        document.getElementById('tour-grouped').innerHTML =
+          '<div class="gl-loading">Could not load tour dates. Please try again later.</div>';
+        console.error(err);
+      });
   </script>
 </body>
 </html>
