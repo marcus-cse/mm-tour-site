@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tour Dates — Marcus Maldonado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <style>
+    .gl-root.gl-page { min-height: 100vh; }
+    /* Loading skeleton */
+    .gl-loading {
+      padding: 96px 48px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+    }
+    /* Filter active */
+    .gl-filter.is-active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    /* Sticky nav on inner pages */
+    .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body>
+  <div class="gl-root gl-page">
+
+    <!-- Nav -->
+    <header class="gl-nav gl-nav--page">
+      <a href="../index.html" class="gl-mark">MM</a>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="tour-dates.html" class="is-current">Tour</a>
+        <a href="flight-map.html">Map</a>
+        <a href="about.html">About</a>
+      </nav>
+      <a href="booking.html" class="gl-nav-cta">Inquire</a>
+      <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+    <div class="gl-nav-overlay" id="nav-overlay">
+      <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+      <a href="../index.html">Home</a>
+      <a href="tour-dates.html" class="is-current">Tour</a>
+      <a href="flight-map.html">Map</a>
+      <a href="about.html">About</a>
+      <a href="booking.html" class="gl-nav-overlay-cta">Inquire</a>
+    </div>
+
+    <!-- Stats strip (populated by JS) -->
+    <section class="gl-stat-strip gl-stat-strip--top" id="stats-strip">
+      <div class="gl-stat">
+        <div class="gl-stat-num gl-mono" id="stat-total">—</div>
+        <div class="gl-mono gl-stat-label">SHOWS</div>
+      </div>
+      <div class="gl-stat">
+        <div class="gl-stat-num gl-mono" id="stat-regions">—</div>
+        <div class="gl-mono gl-stat-label">CITIES</div>
+      </div>
+      <div class="gl-stat">
+        <div class="gl-stat-num gl-mono" id="stat-acts">—</div>
+        <div class="gl-mono gl-stat-label">ACTS</div>
+      </div>
+    </section>
+
+    <!-- Filter bar (populated by JS) -->
+    <section class="gl-tour-page-filters" id="filter-bar">
+      <div class="gl-mono gl-filter-eyebrow">FILTER BY ARTIST</div>
+      <div class="gl-filters" id="filter-buttons">
+        <div class="gl-mono" style="color:var(--muted);">Loading…</div>
+      </div>
+    </section>
+
+    <!-- Grouped show list (populated by JS) -->
+    <section class="gl-tour-grouped" id="tour-grouped">
+      <div class="gl-loading">LOADING TOUR DATES…</div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gl-footer">
+      <div class="gl-footer-top">
+        <div class="gl-footer-mark">MM</div>
+        <div class="gl-footer-cols">
+          <div>
+            <div class="gl-footer-label">CONTACT</div>
+            <div>marcus@marcian.live</div>
+          </div>
+          <div>
+            <div class="gl-footer-label">FOLLOW</div>
+            <a href="https://www.instagram.com/musicianmarcus/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          </div>
+        </div>
+      </div>
+      <div class="gl-footer-bot">
+        <span>© <span id="footer-year"></span> MARCUS MALDONADO</span>
+        <span>BUILT IN TEXAS</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="../assets/nav.js"></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
+
+    // Exact same pattern as the working showData.js
+    function parseShowDate(dateStr) {
+      return dayjs(`${dateStr} ${dayjs().year()}`);
+    }
+
+    function fmtDay(d)       { return parseShowDate(d).format('DD'); }
+    function fmtMonth(d)     { return parseShowDate(d).format('MMM').toUpperCase(); }
+    function fmtWeek(d)      { return parseShowDate(d).format('ddd').toUpperCase(); }
+    function fmtMonthYear(d) { return parseShowDate(d).format('MMMM YYYY').toUpperCase(); }
+
+    async function fetchShows() {
+      const response = await fetch(SHEET_URL);
+      const text = await response.text();
+      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+      return parsed.data;
+    }
+
+    function adaptShow(row) {
+      const hasTickets = (row.ticket_url || '').trim();
+      const isPublic   = String(row.is_public || '').toLowerCase() === 'true';
+      return {
+        date: row.date,
+        artist: (row.artist || '').trim(),
+        artistUrl: (row.artist_url || '').trim() || null,
+        venue: (row.venue || '').trim(),
+        city: `${(row.city || '').trim()}, ${(row.state || '').trim()}`,
+        status: hasTickets ? 'tickets' : isPublic ? 'public' : 'private',
+        url: hasTickets || null,
+      };
+    }
+
+    function rowHTML(show, globalIndex) {
+      const isPrivate = show.status === 'private';
+      const ticketBtn = show.status === 'tickets'
+        ? `<a href="${show.url}" target="_blank" rel="noopener" class="gl-row-tickets">Tickets →</a>`
+        : show.status === 'public'
+        ? `<span class="gl-row-public">FREE</span>`
+        : `<span class="gl-row-private">PRIVATE</span>`;
+
+      return `
+        <article class="gl-row${isPrivate ? ' gl-row--private' : ''}">
+          <div class="gl-row-i">${String(globalIndex + 1).padStart(2, '0')}</div>
+          <div class="gl-row-date">
+            <div class="gl-row-day">${fmtDay(show.date)}</div>
+            <div class="gl-row-mo">${fmtMonth(show.date)}</div>
+          </div>
+          <div class="gl-row-week">${fmtWeek(show.date)}</div>
+          <div class="gl-row-venue">
+            <div class="gl-row-name">${isPrivate ? 'Private Event' : show.venue}</div>
+            <div class="gl-row-city">${show.city}</div>
+          </div>
+          <div class="gl-row-artist">${show.artistUrl ? `<a href="${show.artistUrl}" target="_blank" rel="noopener">${show.artist}</a>` : show.artist}</div>
+          <div class="gl-row-cta">${ticketBtn}</div>
+        </article>`;
+    }
+
+    function groupByMonth(shows) {
+      const groups = {};
+      shows.forEach(show => {
+        const key = fmtMonthYear(show.date);
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(show);
+      });
+      return groups;
+    }
+
+    function renderGrouped(shows, allShows) {
+      const grouped = groupByMonth(shows);
+      const container = document.getElementById('tour-grouped');
+
+      if (Object.keys(grouped).length === 0) {
+        container.innerHTML = '<div class="gl-empty">No shows match this filter.</div>';
+        return;
+      }
+
+      container.innerHTML = Object.entries(grouped).map(([month, monthShows]) => {
+        const rows = monthShows.map(show => rowHTML(show, allShows.indexOf(show))).join('');
+        return `
+          <div class="gl-month">
+            <div class="gl-month-head">
+              <h2 class="gl-month-title">${month}</h2>
+              <div class="gl-mono gl-month-count">${monthShows.length} ${monthShows.length === 1 ? 'SHOW' : 'SHOWS'}</div>
+            </div>
+            <div class="gl-tour-list gl-tour-list--page">${rows}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderFilters(artists, activeFilter, allShows) {
+      const btns = document.getElementById('filter-buttons');
+      const allArtists = ['All', ...artists];
+      btns.innerHTML = allArtists.map(a => {
+        const count = a === 'All' ? allShows.length : allShows.filter(s => s.artist === a).length;
+        const isActive = a === activeFilter;
+        return `
+          <button class="gl-filter${isActive ? ' is-active' : ''}" data-artist="${a}">
+            ${a}
+            <span class="gl-filter-count">${count}</span>
+          </button>`;
+      }).join('');
+
+      btns.querySelectorAll('.gl-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const artist = btn.dataset.artist;
+          const visible = artist === 'All' ? allShows : allShows.filter(s => s.artist === artist);
+          renderFilters(artists, artist, allShows);
+          renderGrouped(visible, allShows);
+        });
+      });
+    }
+
+    fetchShows().then(rows => {
+        const today = dayjs();
+        const allShows = rows
+          .map(adaptShow)
+          .filter(s => s.date && parseShowDate(s.date).isValid() && parseShowDate(s.date) >= today)
+          .sort((a, b) => parseShowDate(a.date) - parseShowDate(b.date));
+
+        // Stats
+        const cities = new Set(allShows.map(s => s.city)).size;
+        const acts   = new Set(allShows.map(s => s.artist)).size;
+
+        document.getElementById('stat-total').textContent   = allShows.length;
+        document.getElementById('stat-regions').textContent = cities;
+        document.getElementById('stat-acts').textContent    = acts;
+
+        // Filters
+        const artists = [...new Set(allShows.map(s => s.artist))];
+        renderFilters(artists, 'All', allShows);
+
+        // Shows
+        renderGrouped(allShows, allShows);
+      })
+      .catch(err => {
+        document.getElementById('tour-grouped').innerHTML =
+          '<div class="gl-loading">Could not load tour dates. Please try again later.</div>';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>

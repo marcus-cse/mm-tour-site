@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Marcus Maldonado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <style>
+    .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
+    .gl-scroll-hint {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      color: var(--fg);
+      opacity: 0.4;
+      transition: opacity 0.5s;
+      pointer-events: none;
+      z-index: 100;
+      animation: scroll-bounce 2s ease-in-out infinite;
+    }
+    .gl-scroll-hint.is-hidden { opacity: 0; }
+    @media (max-width: 768px) { .gl-scroll-hint { display: none; } }
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(7px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="gl-root gl-page">
+
+    <!-- Nav -->
+    <header class="gl-nav gl-nav--page">
+      <a href="../index.html" class="gl-mark">MM</a>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="tour-dates.html">Tour</a>
+        <a href="flight-map.html">Map</a>
+        <a href="about.html" class="is-current">About</a>
+      </nav>
+      <a href="booking.html" class="gl-nav-cta">Inquire</a>
+      <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+    <div class="gl-nav-overlay" id="nav-overlay">
+      <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+      <a href="../index.html">Home</a>
+      <a href="tour-dates.html">Tour</a>
+      <a href="flight-map.html">Map</a>
+      <a href="about.html" class="is-current">About</a>
+      <a href="booking.html" class="gl-nav-overlay-cta">Inquire</a>
+    </div>
+
+    <!-- Cover — portrait beside type -->
+    <section class="gl-about-cover">
+      <div class="gl-about-cover-text">
+        <span class="gl-mono" style="color:var(--muted);display:block;margin-bottom:32px;">— PAGE / ABOUT</span>
+        <h1 class="gl-page-title" style="font-size:clamp(56px,10vw,160px);">
+          Raised in Texas.<br>
+          Booked<br>
+          <em style="font-style:italic;">worldwide.</em>
+        </h1>
+      </div>
+      <div class="gl-about-cover-img">
+        <img src="../assets/mm-portrait-1.jpg" alt="Marcus Maldonado portrait" />
+      </div>
+    </section>
+
+    <!-- Bio — pull quote treatment -->
+    <section class="gl-about-bio">
+      <div class="gl-mono" style="color:var(--muted);margin-bottom:24px;">— BIO</div>
+      <p class="gl-about-pull">
+        Engineer by trade. Guitarist by passion.<br>Equally serious about both.
+      </p>
+      <p class="gl-about-body">
+        Marcus has spent 12 years doing two things seriously: writing software and playing guitar.
+        While most people pick one lane, he context-switches between them daily — thriving in both
+        analytical and creative environments. Parallel to his successful corporate career in tech,
+        his time in the music industry has taken him places he never dreamed of. His musical
+        approach has landed him incredible opportunities both domestic and international, as he's
+        been able to perform on festival stages across the country, headline engagements abroad,
+        and open for artists he grew up listening to. He currently plays lead guitar for the breakout country artist
+        Don Louis, performs at luxury events with AURA, and plays guitar at multiple local churches in DFW.
+      </p>
+    </section>
+
+    <!-- Career timeline -->
+    <section class="gl-timeline">
+      <div class="gl-timeline-head">
+        <div class="gl-mono" style="color:var(--muted);">— CAREER</div>
+        <h2 class="gl-section-title">Highlights.</h2>
+      </div>
+      <div class="gl-timeline-list">
+        <div class="gl-timeline-row">
+          <div class="gl-timeline-y">2026</div>
+          <div class="gl-timeline-c">
+            <div class="gl-timeline-t">Performed at Whiskey Jam</div>
+            <div class="gl-timeline-who">WITH DON LOUIS</div>
+          </div>
+          <div class="gl-timeline-n">My first time performing in Nashville.</div>
+        </div>
+        <div class="gl-timeline-row">
+          <div class="gl-timeline-y">2025</div>
+          <div class="gl-timeline-c">
+            <div class="gl-timeline-t">Opened for <strong>Nelly</strong> in PA</div>
+            <div class="gl-timeline-who">WITH DON LOUIS</div>
+          </div>
+          <div class="gl-timeline-n">Musikfest 2025.</div>
+        </div>
+        <div class="gl-timeline-row">
+          <div class="gl-timeline-y">2025</div>
+          <div class="gl-timeline-c">
+            <div class="gl-timeline-t">Performed at the <strong>ACM</strong> Awards - Kickoff Event</div>
+            <div class="gl-timeline-who">WITH DON LOUIS</div>
+          </div>
+          <div class="gl-timeline-n">The Star in Frisco.</div>
+        </div>
+        <div class="gl-timeline-row">
+          <div class="gl-timeline-y">2025</div>
+          <div class="gl-timeline-c">
+            <div class="gl-timeline-t">Headlined country music festival in <strong>Hawaii</strong></div>
+            <div class="gl-timeline-who">WITH DON LOUIS</div>
+          </div>
+          <div class="gl-timeline-n">Over 5,000 people in attendance.</div>
+        </div>
+        <div class="gl-timeline-row">
+          <div class="gl-timeline-y">2024</div>
+          <div class="gl-timeline-c">
+            <div class="gl-timeline-t">10-day Cruise Contract in <strong>Europe</strong></div>
+            <div class="gl-timeline-who">WITH AURA</div>
+          </div>
+          <div class="gl-timeline-n">2-3 shows per night, across multiple Greek islands.</div>
+        </div>
+        <div class="gl-timeline-row">
+          <div class="gl-timeline-y">2023</div>
+          <div class="gl-timeline-c">
+            <div class="gl-timeline-t">Entered the country music scene</div>
+            <div class="gl-timeline-who">WITH DON LOUIS</div>
+          </div>
+          <div class="gl-timeline-n">Texas circuit, many cities.</div>
+        </div>
+        <div class="gl-timeline-row">
+          <div class="gl-timeline-y">2022</div>
+          <div class="gl-timeline-c">
+            <div class="gl-timeline-t">Began touring semi-professionally</div>
+            <div class="gl-timeline-who">WITH AURA</div>
+          </div>
+          <div class="gl-timeline-n">Luxury weddings and events all over the US.</div>
+        </div>
+        <div class="gl-timeline-row">
+          <div class="gl-timeline-y">2021</div>
+          <div class="gl-timeline-c">
+            <div class="gl-timeline-t">Accepted role of <strong>Music Director</strong></div>
+            <div class="gl-timeline-who">WITH LOCAL CHURCH</div>
+          </div>
+          <div class="gl-timeline-n">Led a 4-piece band, every Sunday.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Credits + portrait -->
+    <section class="gl-credits-portrait">
+      <div class="gl-credits-photo">
+        <img src="../assets/mm-portrait-2.jpg" alt="Marcus Maldonado live" class="gl-credits-img" />
+      </div>
+      <div class="gl-credits-text">
+        <div class="gl-mono" style="color:var(--muted);">— CREDITS</div>
+        <h2 class="gl-section-title">Acts &amp;<br>partners.</h2>
+        <div class="gl-press">
+          <div class="gl-press-row">
+            <div>
+              <div class="gl-press-artist">MARCIAN ENTERTAINMENT</div>
+              <div class="gl-press-role">Owner, Founder</div>
+            </div>
+            <div class="gl-press-r">An emerging live music entertainment company.</div>
+          </div>
+          <div class="gl-press-row">
+            <div>
+              <div class="gl-press-artist">Don Louis</div>
+              <div class="gl-press-role">Lead Guitarist</div>
+            </div>
+            <div class="gl-press-r">Currently on tour.</div>
+          </div>
+          <div class="gl-press-row">
+            <div>
+              <div class="gl-press-artist">AURA</div>
+              <div class="gl-press-role">Lead Guitarist</div>
+            </div>
+            <div class="gl-press-r">Luxury weddings and corporate events.</div>
+          </div>
+          <div class="gl-press-row">
+            <div>
+              <div class="gl-press-artist">Local Churches</div>
+              <div class="gl-press-role">Lead Guitarist, Music Director</div>
+            </div>
+            <div class="gl-press-r">Serving with the music ministry.</div>
+          </div>
+          <div class="gl-press-row">
+            <div>
+              <div class="gl-press-artist">Independent Artists</div>
+              <div class="gl-press-role">Guitarist, Band Leader</div>
+            </div>
+            <div class="gl-press-r">Supporting multiple local artists and bands in DFW.</div>
+          </div>
+          <div class="gl-press-row">
+            <div>
+              <div class="gl-press-artist">Bellos Audio</div>
+              <div class="gl-press-role">Artist</div>
+            </div>
+            <div class="gl-press-r">The best in-ears I've ever owned.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gl-footer">
+      <div class="gl-footer-top">
+        <div class="gl-footer-mark">MM</div>
+        <div class="gl-footer-cols">
+          <div>
+            <div class="gl-footer-label">CONTACT</div>
+            <div>marcus@marcian.live</div>
+          </div>
+          <div>
+            <div class="gl-footer-label">FOLLOW</div>
+            <a href="https://www.instagram.com/musicianmarcus/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          </div>
+        </div>
+      </div>
+      <div class="gl-footer-bot">
+        <span>© <script>document.write(new Date().getFullYear())</script> MARCUS MALDONADO</span>
+        <span>BUILT IN TEXAS</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="../assets/nav.js"></script>
+  <script>
+    const hint = document.getElementById('scroll-hint');
+    function checkScroll() {
+      const nearBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 80;
+      hint.classList.toggle('is-hidden', nearBottom);
+    }
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
+  </script>
+  <div class="gl-scroll-hint" id="scroll-hint">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </div>
+
+
+</body>
+</html>

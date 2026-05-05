@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tour Map — Marcus Maldonado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="../assets/styles-tour-map.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    .gl-root.gl-page.tm-page { height: 100%; display: flex; flex-direction: column; }
+    .gl-nav--page { position: relative; flex-shrink: 0; }
+    .tm-stage { flex: 1; min-height: 0; overflow: hidden; }
+    .tm-right { padding: 0; }
+    .tm-map-frame { border: none; }
+    #flight-map { width: 100%; height: 100%; }
+    .tm-map-frame { position: relative; overflow: hidden; }
+    @media (max-width: 768px) {
+      html, body { height: auto; overflow: auto; }
+      .gl-root.gl-page.tm-page { height: auto; }
+      .tm-stage { flex: none; overflow: visible; }
+      #flight-map { height: 280px; }
+    }
+    /* Override leaflet defaults to blend with design */
+    .leaflet-container { background: #F4F2EE; font-family: var(--mono, 'JetBrains Mono', monospace); }
+    .gl-home-strip {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 48px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--fg);
+      flex-shrink: 0;
+      border-top: 1px solid var(--hairline);
+    }
+  </style>
+</head>
+<body>
+  <div class="gl-root gl-page tm-page">
+
+    <!-- Nav -->
+    <header class="gl-nav gl-nav--page">
+      <a href="../index.html" class="gl-mark">MM</a>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="tour-dates.html">Tour</a>
+        <a href="flight-map.html" class="is-current">Map</a>
+        <a href="about.html">About</a>
+      </nav>
+      <a href="booking.html" class="gl-nav-cta">Inquire</a>
+      <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+    <div class="gl-nav-overlay" id="nav-overlay">
+      <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+      <a href="../index.html">Home</a>
+      <a href="tour-dates.html">Tour</a>
+      <a href="flight-map.html" class="is-current">Map</a>
+      <a href="about.html">About</a>
+      <a href="booking.html" class="gl-nav-overlay-cta">Inquire</a>
+    </div>
+
+    <!-- Two-column stage -->
+    <div class="tm-stage">
+
+      <!-- LEFT: title + stats + now playing -->
+      <div class="tm-left">
+        <div class="tm-eyebrow">
+          <span>TOUR MAP</span>
+          <span id="tm-season">2026 SEASON</span>
+        </div>
+
+        <h1 class="tm-title">
+          ON THE<br>
+          <em>ROAD.</em>
+        </h1>
+
+        <p class="tm-lede" id="tm-lede">
+          Loading tour dates…
+        </p>
+
+        <div class="tm-stats">
+          <div class="tm-stat">
+            <div class="tm-stat-num" id="tm-total">—</div>
+            <div class="tm-stat-lbl">Shows</div>
+          </div>
+          <div class="tm-stat">
+            <div class="tm-stat-num" id="tm-cities">—</div>
+            <div class="tm-stat-lbl">Cities</div>
+          </div>
+          <div class="tm-stat">
+            <div class="tm-stat-num" id="tm-public">—</div>
+            <div class="tm-stat-lbl">Acts</div>
+          </div>
+        </div>
+
+        <!-- Now playing card -->
+        <div class="tm-now">
+          <div class="tm-now-label">
+            NOW PLAYING <span class="tm-pulse"></span>
+          </div>
+          <div class="tm-now-row">
+            <div class="tm-now-date">
+              <div class="tm-now-day" id="now-day">—</div>
+              <div class="tm-now-mo" id="now-mo">—</div>
+            </div>
+            <div class="tm-now-meta">
+              <div class="tm-now-artist" id="now-artist">—</div>
+              <div class="tm-now-venue" id="now-venue">—</div>
+              <div class="tm-now-city" id="now-city">—</div>
+            </div>
+          </div>
+          <div class="tm-now-bar">
+            <div class="tm-now-bar-fill" id="now-bar-fill" style="width:0%"></div>
+          </div>
+          <div class="tm-now-counter">
+            <span id="now-idx">01</span>
+            <span>/</span>
+            <span id="now-total">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: SVG map -->
+      <div class="tm-right">
+        <div class="tm-map-frame">
+          <!-- Leaflet map -->
+          <div id="flight-map"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="gl-home-strip">
+      <span>© <span id="map-year"></span> MARCUS MALDONADO</span>
+      <span>BUILT IN TEXAS</span>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../assets/nav.js"></script>
+  <script>
+    document.getElementById('map-year').textContent = new Date().getFullYear();
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
+
+    // Identical to showData.js — confirmed working
+    function parseShowDate(dateStr) {
+      return dayjs(`${dateStr} ${dayjs().year()}`);
+    }
+
+    const fmtDay   = d => parseShowDate(d).format('DD');
+    const fmtMonth = d => parseShowDate(d).format('MMM').toUpperCase();
+
+    async function fetchShows() {
+      const response = await fetch(SHEET_URL);
+      const text = await response.text();
+      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+      return parsed.data;
+    }
+
+    function adaptShow(row) {
+      const hasTickets = (row.ticket_url || '').trim();
+      const isPublic   = String(row.is_public || '').toLowerCase() === 'true';
+      return {
+        date: (row.date || '').trim(),
+        artist: (row.artist || '').trim(),
+        venue: (row.venue || '').trim(),
+        city: `${(row.city || '').trim()}, ${(row.state || '').trim()}`,
+        status: hasTickets ? 'tickets' : isPublic ? 'public' : 'private',
+        lat: parseFloat(row.latitude),
+        lng: parseFloat(row.longitude),
+      };
+    }
+
+    function updateNowCard(show, idx, total, progress) {
+      document.getElementById('now-day').textContent    = fmtDay(show.date);
+      document.getElementById('now-mo').textContent     = fmtMonth(show.date);
+      document.getElementById('now-artist').textContent = show.artist;
+      document.getElementById('now-venue').textContent  = show.status === 'private' ? 'Private engagement' : show.venue;
+      document.getElementById('now-city').textContent   = show.city;
+      document.getElementById('now-bar-fill').style.width = `${progress * 100}%`;
+      document.getElementById('now-idx').textContent   = String(idx + 1).padStart(2, '0');
+      document.getElementById('now-total').textContent = String(total).padStart(2, '0');
+    }
+
+    fetchShows().then(rows => {
+        const today = dayjs();
+
+        const shows = rows
+          .map(adaptShow)
+          .filter(s => s.date && parseShowDate(s.date).isValid() && parseShowDate(s.date) >= today)
+          .sort((a, b) => parseShowDate(a.date) - parseShowDate(b.date));
+
+        const mapShows = shows.filter(s => !isNaN(s.lat) && !isNaN(s.lng));
+
+        if (!shows.length) return;
+
+        const totalShows   = shows.length;
+        const publicShows  = new Set(shows.map(s => s.artist)).size;
+        const uniqueCities = new Set(shows.map(s => s.city)).size;
+
+        document.getElementById('tm-season').textContent  = new Date().getFullYear() + ' SEASON';
+        document.getElementById('tm-total').textContent   = totalShows;
+        document.getElementById('tm-public').textContent  = publicShows;
+        document.getElementById('tm-cities').textContent  = uniqueCities;
+        document.getElementById('now-total').textContent  = totalShows;
+        const lastShow = shows[shows.length - 1];
+        const weeksOut = Math.ceil(parseShowDate(lastShow.date).diff(dayjs(), 'day') / 7);
+        document.getElementById('tm-lede').textContent    =
+          `Over the next ${weeksOut} weeks, I have ${totalShows} shows across ${uniqueCities} ${uniqueCities === 1 ? 'city' : 'cities'}.`;
+
+        updateNowCard(shows[0], 0, totalShows, 0);
+
+        if (mapShows.length > 0) {
+          const points = mapShows.map(s => [s.lat, s.lng]);
+
+          const map = L.map('flight-map', {
+            zoomControl: false,
+            attributionControl: false,
+            scrollWheelZoom: false,
+            doubleClickZoom: false,
+            touchZoom: false,
+            boxZoom: false,
+            dragging: false,
+          });
+
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 18,
+          }).addTo(map);
+
+          let polyline, markers = [];
+
+          function animatePath() {
+            let step = 1;
+            if (polyline) polyline.remove();
+            markers.forEach(m => m.remove());
+            markers = [];
+
+            polyline = L.polyline([points[0]], {
+              color: '#0A0A0A',
+              weight: 2,
+              opacity: 0.7,
+              dashArray: '6 5',
+            }).addTo(map);
+
+            const firstMarker = L.circleMarker(points[0], {
+              radius: 5, color: '#0A0A0A', fillColor: '#C8A96E', fillOpacity: 1, weight: 2,
+            }).addTo(map);
+            markers.push(firstMarker);
+
+            updateNowCard(mapShows[0], shows.indexOf(mapShows[0]), totalShows, 0);
+
+            function drawStep() {
+              if (step >= points.length) {
+                updateNowCard(mapShows[mapShows.length - 1], shows.indexOf(mapShows[mapShows.length - 1]), totalShows, 1);
+                setTimeout(animatePath, 1200);
+                return;
+              }
+
+              polyline.addLatLng(points[step]);
+
+              const marker = L.circleMarker(points[step], {
+                radius: 5, color: '#0A0A0A', fillColor: '#C8A96E', fillOpacity: 1, weight: 2,
+              }).addTo(map);
+              markers.push(marker);
+
+              const progress = step / (points.length - 1);
+              updateNowCard(mapShows[step], shows.indexOf(mapShows[step]), totalShows, progress);
+
+              step++;
+              setTimeout(drawStep, 1000);
+            }
+
+            setTimeout(drawStep, 1000);
+          }
+
+          setTimeout(() => {
+            map.invalidateSize();
+            map.fitBounds(points, { padding: [40, 40] });
+            animatePath();
+          }, 100);
+        } else {
+          // No coordinates — cycle the card on an interval
+          let cardIdx = 0;
+          setInterval(() => {
+            cardIdx = (cardIdx + 1) % totalShows;
+            updateNowCard(shows[cardIdx], cardIdx, totalShows, cardIdx / totalShows);
+          }, 3000);
+        }
+      })
+      .catch(err => {
+        document.getElementById('tm-lede').textContent = 'Could not load tour data.';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking — Marcus Maldonado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    .gl-nav--page { position: relative; flex-shrink: 0; }
+    .gl-root.gl-page.gl-booking-simple { height: 100%; overflow: hidden; display: flex; flex-direction: column; }
+    .gl-booking-hero { flex: 1; min-height: 0; }
+  </style>
+</head>
+<body>
+  <div class="gl-root gl-page gl-booking-simple">
+
+    <!-- Nav -->
+    <header class="gl-nav gl-nav--page">
+      <a href="../index.html" class="gl-mark">MM</a>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="tour-dates.html">Tour</a>
+        <a href="flight-map.html">Map</a>
+        <a href="about.html">About</a>
+      </nav>
+      <a href="booking.html" class="gl-nav-cta">Inquire</a>
+      <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+    <div class="gl-nav-overlay" id="nav-overlay">
+      <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+      <a href="../index.html">Home</a>
+      <a href="tour-dates.html">Tour</a>
+      <a href="flight-map.html">Map</a>
+      <a href="about.html">About</a>
+      <a href="booking.html" class="gl-nav-overlay-cta is-current">Inquire</a>
+    </div>
+
+    <!-- Booking hero -->
+    <section class="gl-booking-hero">
+      <div class="gl-booking-hero-l">
+        <span class="gl-mono gl-booking-eyebrow">— BOOKING</span>
+        <h1 class="gl-booking-headline">
+          Let's<br>
+          <em>talk</em>.
+        </h1>
+        <p class="gl-booking-sub">
+          Available for weddings, corporate events, festivals, and session work.
+          Domestic and international.
+        </p>
+      </div>
+
+      <div class="gl-booking-hero-r">
+        <div class="gl-contact-block">
+          <div class="gl-mono gl-contact-label">EMAIL</div>
+          <a href="mailto:marcus@marcian.live" class="gl-contact-primary">
+            marcus@marcian.live
+          </a>
+          <div class="gl-mono gl-contact-meta">RESPONSE WITHIN 48 HOURS</div>
+        </div>
+
+        <div class="gl-contact-block">
+          <div class="gl-mono gl-contact-label">INSTAGRAM</div>
+          <a href="https://www.instagram.com/musicianmarcus/" target="_blank" rel="noopener noreferrer" class="gl-contact-primary">
+            @musicianmarcus <span class="gl-contact-arrow">↗</span>
+          </a>
+          <div class="gl-mono gl-contact-meta">DM FOR FASTER REPLIES</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gl-footer">
+      <div class="gl-footer-top">
+        <div class="gl-footer-mark">MM</div>
+        <div class="gl-footer-cols">
+          <div>
+            <div class="gl-footer-label">CONTACT</div>
+            <div>marcus@marcian.live</div>
+          </div>
+          <div>
+            <div class="gl-footer-label">FOLLOW</div>
+            <a href="https://www.instagram.com/musicianmarcus/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          </div>
+        </div>
+      </div>
+      <div class="gl-footer-bot">
+        <span>© <script>document.write(new Date().getFullYear())</script> MARCUS MALDONADO</span>
+        <span>BUILT IN TEXAS</span>
+      </div>
+    </footer>
+
+  </div>
+  <script src="../assets/nav.js"></script>
+</body>
+</html>

@@ -1,181 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MM Tour Dates</title>
-  <link rel="icon" type="image/png" href="assets/mm_logo.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marcus Maldonado — Guitarist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
   <style>
-    body {
-      background-color: #1a1a1a;
-      font-family: 'Helvetica Neue', sans-serif;
-      color: #fff;
-      margin: 0;
-      padding: 40px 20px;
+    html, body { height: 100%; overflow: hidden; }
+    .gl-root.gl-home-only { height: 100%; display: flex; flex-direction: column; }
+    .gl-hero.gl-hero--full { flex: 1; min-height: 0; }
+    .gl-hero-now-val, .gl-hero-now-sub { transition: opacity 0.4s; }
+    .gl-home-strip {
+      background: var(--bg);
       display: flex;
-      justify-content: center;
-    }
-    .container {
-      max-width: 500px;
-      width: 100%;
-    }
-    
-.site-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.site-header .logo {
-  width: 160px;
-  height: auto;
-  margin-bottom: 15px;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
-}
-
-.main-title {
-  font-size: 2.2em;
-  color: #fff;
-  text-transform: none;
-  margin: 0;
-  text-shadow: 2px 2px #000;
-}
-
-    .card {
-      background-color: #222;
-      border: 1px solid #444;
-      border-radius: 12px;
-      padding: 30px;
-      margin-bottom: 30px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
-    .artist {
-      font-size: 1em;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #bbb;
-      margin-bottom: 10px;
-    }
-    .date {
-      font-size: 2em;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .venue {
-      font-size: 1.2em;
-      font-weight: 500;
-    }
-    .location {
-      font-size: 1.1em;
-      margin-bottom: 30px;
-      color: #ccc;
-    }
-    .buttons {
-      display: flex;
-      justify-content: center;
-    }
-    .buttons a,
-    .buttons span {
-      text-decoration: none;
-      color: #fff;
-      border: 2px solid #fff;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    .buttons a:hover {
-      background-color: #fff;
-      color: #000;
-    }
-    .buttons span {
-      opacity: 0.5;
-      cursor: default;
-      background-color: transparent;
-      border-style: dashed;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 48px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--fg);
+      flex-shrink: 0;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    
-<header class="site-header">
-  <img src="assets/mm_logo.png" alt="musicianmarcus Logo" class="logo">
-  <h1 class="main-title">Upcoming Shows</h1>
-</header>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">27 Sep</div>
-      <div class="venue">Way Out West Fest</div>
-      <div class="location">El Paso, TX</div>
-      <div class="buttons"><a href="https://epwayoutwest.com/" target="_blank">Tickets</a></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">02 Oct</div>
-      <div class="venue">Southbound Bar & Grill</div>
-      <div class="location">Springfield, MO</div>
-      <div class="buttons"><a href="https://www.southboundbar.com/" target="_blank">Tickets</a></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">04 Oct</div>
-      <div class="venue">Silver Saloon</div>
-      <div class="location">Terrell, TX</div>
-      <div class="buttons"><a href="https://www.silversaloonterrell.com/" target="_blank">Tickets</a></div>
-    </div>
+  <div class="gl-root gl-home-only">
+    <section class="gl-hero gl-hero--full">
 
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">10 Oct</div>
-      <div class="venue">Cherokee Casino</div>
-      <div class="location">Roland, OK</div>
-      <div class="buttons"><span>Free!</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">Don Louis</div>
-      <div class="date">11 Oct</div>
-      <div class="venue">Hard Rock Hotel And Casino Tulsa</div>
-      <div class="location">Catoosa, OK</div>
-      <div class="buttons"><span>Free!</span></div>
-    </div>
+      <!-- Background photo + scrim -->
+      <div class="gl-hero-image">
+        <img src="assets/mm-backdrop.jpg" alt="Marcus Maldonado on stage" class="gl-hero-img" />
+        <div class="gl-hero-scrim"></div>
+      </div>
 
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">19 Oct</div>
-      <div class="venue">Exclusive Venue</div>
-      <div class="location">McKinney, TX</div>
-      <div class="buttons"><span>Private</span></div>
+      <!-- Nav -->
+      <header class="gl-nav">
+        <a href="index.html" class="gl-mark">MM</a>
+        <nav>
+          <a href="index.html" class="is-current">Home</a>
+          <a href="pages/tour-dates.html">Tour</a>
+          <a href="pages/flight-map.html">Map</a>
+          <a href="pages/about.html">About</a>
+        </nav>
+        <a href="pages/booking.html" class="gl-nav-cta">Inquire</a>
+        <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </header>
+
+      <!-- Mobile nav overlay -->
+      <div class="gl-nav-overlay" id="nav-overlay">
+        <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+        <a href="index.html" class="is-current">Home</a>
+        <a href="pages/tour-dates.html">Tour</a>
+        <a href="pages/flight-map.html">Map</a>
+        <a href="pages/about.html">About</a>
+        <a href="pages/booking.html" class="gl-nav-overlay-cta">Inquire</a>
+      </div>
+
+      <!-- Hero text -->
+      <div class="gl-hero-text">
+        <div class="gl-hero-eyebrow">
+          <span>GUITARIST · TEXAS</span>
+        </div>
+        <h1 class="gl-hero-title"><span style="display:block;margin-bottom:0.12em">MARCUS</span>MALDONADO</h1>
+        <p class="gl-hero-tag-line">
+          Soulful, professional guitar performances<br>
+          for artists, weddings, and luxury experiences.
+        </p>
+      </div>
+
+      <!-- Footer strip -->
+      <div class="gl-hero-foot">
+        <div class="gl-hero-foot-l">
+          <a href="pages/tour-dates.html" class="gl-hero-link">
+            <span class="gl-hero-link-num">01</span>
+            <span>VIEW TOUR DATES</span>
+            <span>→</span>
+          </a>
+          <a href="pages/booking.html" class="gl-hero-link">
+            <span class="gl-hero-link-num">02</span>
+            <span>BOOK A DATE</span>
+            <span>→</span>
+          </a>
+        </div>
+        <div class="gl-hero-now">
+          <div class="gl-hero-now-label">NEXT SHOW</div>
+          <div class="gl-hero-now-val" id="next-show-val">—</div>
+          <div class="gl-hero-now-sub" id="next-show-sub" style="font-size:12px;opacity:0.7;margin-top:4px;">Loading…</div>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="gl-home-strip">
+      <span>© <span id="home-year"></span> MARCUS MALDONADO</span>
+      <span>BUILT IN TEXAS</span>
     </div>
-    
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">08 Nov</div>
-      <div class="venue">Exclusive Venue</div>
-      <div class="location">Boston, MA</div>
-      <div class="buttons"><span>Private</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">21 Nov</div>
-      <div class="venue">Exclusive Venue</div>
-      <div class="location">Dallas, TX</div>
-      <div class="buttons"><span>Private</span></div>
-    </div>
-    
-    <div class="card">
-      <div class="artist">AURA</div>
-      <div class="date">12 Dec</div>
-      <div class="venue">Exclusive Venue</div>
-      <div class="location">Frisco, TX</div>
-      <div class="buttons"><span>Private</span></div>
-    </div>
-    
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="assets/nav.js"></script>
+  <script>
+document.getElementById('home-year').textContent = new Date().getFullYear();
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
+
+    function parseShowDate(dateStr) {
+      return dayjs(`${dateStr} ${dayjs().year()}`);
+    }
+
+    const fmtDay   = d => parseShowDate(d).format('DD');
+    const fmtMonth = d => parseShowDate(d).format('MMM').toUpperCase();
+
+    fetch(SHEET_URL)
+      .then(r => r.text())
+      .then(text => {
+        const rows = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
+        const today = dayjs();
+        const shows = rows
+          .filter(r => r.date)
+          .map(r => ({
+            date: r.date,
+            artist: (r.artist || '').trim(),
+            venue: (r.venue || '').trim(),
+            city: `${(r.city || '').trim()}, ${(r.state || '').trim()}`,
+            status: (r.ticket_url || '').trim() ? 'tickets' : 'private',
+          }))
+          .filter(s => parseShowDate(s.date).isValid() && parseShowDate(s.date) >= today)
+          .sort((a, b) => parseShowDate(a.date) - parseShowDate(b.date));
+
+        const next = shows[0];
+        if (next) {
+          document.getElementById('next-show-val').textContent =
+            `${fmtMonth(next.date)} ${fmtDay(next.date)} · ${next.artist}`;
+          document.getElementById('next-show-sub').textContent =
+            next.status === 'private' ? 'Private engagement' : `${next.venue} — ${next.city}`;
+        } else {
+          document.getElementById('next-show-val').textContent = 'TBA';
+          document.getElementById('next-show-sub').textContent = 'Stay tuned';
+        }
+      })
+      .catch(() => {
+        document.getElementById('next-show-sub').textContent = '';
+      });
+  </script>
 </body>
 </html>
