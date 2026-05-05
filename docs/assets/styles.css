@@ -1008,7 +1008,6 @@ button { font-family: inherit; cursor: pointer; }
 .gl-credits-photo {
   position: relative;
   background: var(--bg-2);
-  border: 1px solid var(--hairline-strong);
   overflow: hidden;
   aspect-ratio: 4519 / 6775;
 }
