@@ -645,7 +645,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .gl-section-title {
   font-family: var(--display);
-  font-size: clamp(56px, 8vw, 128px);
+  font-size: clamp(36px, 5vw, 72px);
   line-height: 0.9;
   letter-spacing: -0.02em;
   margin: 0;
@@ -1001,7 +1001,7 @@ button { font-family: inherit; cursor: pointer; }
   display: grid;
   grid-template-columns: minmax(360px, 1fr) 1.4fr;
   gap: 64px;
-  padding: 96px 48px;
+  padding: 56px 48px;
   border-bottom: 1px solid var(--hairline);
   align-items: start;
 }
@@ -1174,7 +1174,7 @@ button { font-family: inherit; cursor: pointer; }
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 48px;
-  padding: 96px 48px 96px;
+  padding: 56px 48px;
   align-items: start;
   border-bottom: 1px solid var(--hairline);
 }
@@ -1196,7 +1196,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Bio */
 .gl-about-bio {
-  padding: 96px 48px;
+  padding: 56px 48px;
   border-bottom: 1px solid var(--hairline);
 }
 .gl-about-pull {
@@ -1204,7 +1204,7 @@ button { font-family: inherit; cursor: pointer; }
   font-size: clamp(40px, 5vw, 72px);
   line-height: 1;
   letter-spacing: -0.02em;
-  margin: 0 0 80px;
+  margin: 0 0 40px;
   font-weight: 400;
   text-transform: uppercase;
   max-width: 1100px;
@@ -1230,14 +1230,14 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Timeline */
 .gl-timeline {
-  padding: 96px 48px;
+  padding: 56px 48px;
   border-bottom: 1px solid var(--hairline);
 }
 .gl-timeline-head {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 64px;
+  margin-bottom: 40px;
 }
 .gl-timeline-head > .gl-mono { color: var(--muted); }
 .gl-timeline-list {
@@ -1247,7 +1247,7 @@ button { font-family: inherit; cursor: pointer; }
   display: grid;
   grid-template-columns: 120px 1.2fr 1fr;
   gap: 32px;
-  padding: 28px 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--hairline);
   align-items: baseline;
 }
