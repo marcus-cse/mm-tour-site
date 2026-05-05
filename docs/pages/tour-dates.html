@@ -132,7 +132,7 @@
         const today = dayjs();
         const upcoming = shows.filter(show => {
           const showDate = parseShowDate(show.date);
-          return showDate.isValid() && showDate > today;
+          return showDate.isValid(); // && showDate > today;
         });
         upcoming.sort((a, b) => {
           const dateA = parseShowDate(a.date);
