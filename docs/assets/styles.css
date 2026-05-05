@@ -736,6 +736,17 @@ button { font-family: inherit; cursor: pointer; }
   font-weight: 600;
   color: var(--fg);
 }
+.gl-row-artist a {
+  color: inherit;
+  text-decoration: none;
+  padding: 16px 12px;
+  margin: -16px -12px;
+  display: inline-block;
+}
+.gl-row-artist a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .gl-row-cta {
   display: flex;
   align-items: center;

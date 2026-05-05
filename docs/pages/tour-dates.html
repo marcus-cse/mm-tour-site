@@ -119,6 +119,7 @@
       return {
         date: row.date,
         artist: (row.artist || '').trim(),
+        artistUrl: (row.artist_url || '').trim() || null,
         venue: (row.venue || '').trim(),
         city: `${(row.city || '').trim()}, ${(row.state || '').trim()}`,
         status: hasTickets ? 'tickets' : isPublic ? 'public' : 'private',
@@ -143,10 +144,10 @@
           </div>
           <div class="gl-row-week">${fmtWeek(show.date)}</div>
           <div class="gl-row-venue">
-            <div class="gl-row-name">${isPrivate ? 'Private Engagement' : show.venue}</div>
-            <div class="gl-row-city">${isPrivate ? 'Details on request' : show.city}</div>
+            <div class="gl-row-name">${isPrivate ? 'Private Event' : show.venue}</div>
+            <div class="gl-row-city">${show.city}</div>
           </div>
-          <div class="gl-row-artist">${show.artist}</div>
+          <div class="gl-row-artist">${show.artistUrl ? `<a href="${show.artistUrl}" target="_blank" rel="noopener">${show.artist}</a>` : show.artist}</div>
           <div class="gl-row-cta">${ticketBtn}</div>
         </article>`;
     }
