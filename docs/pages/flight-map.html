@@ -11,14 +11,18 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     html, body { height: 100%; overflow: hidden; }
-    .gl-root.gl-page.tm-page { height: 100%; overflow: hidden; display: flex; flex-direction: column; }
+    .gl-root.gl-page.tm-page { height: 100%; display: flex; flex-direction: column; }
     .gl-nav--page { position: relative; flex-shrink: 0; }
-    .tm-stage { flex: 1; min-height: 0; }
+    .tm-stage { flex: 1; min-height: 0; overflow: hidden; }
+    .tm-right { padding: 0; }
+    .tm-map-frame { border: none; }
     #flight-map { width: 100%; height: 100%; }
     .tm-map-frame { position: relative; overflow: hidden; }
     /* Override leaflet defaults to blend with design */
     .leaflet-container { background: #F4F2EE; font-family: var(--mono, 'JetBrains Mono', monospace); }
     .gl-home-strip {
+      width: 100%;
+      box-sizing: border-box;
       background: var(--bg);
       display: flex;
       justify-content: space-between;
@@ -112,12 +116,6 @@
       <!-- RIGHT: SVG map -->
       <div class="tm-right">
         <div class="tm-map-frame">
-          <!-- Corner ticks -->
-          <span class="tm-tick tm-tick--tl"></span>
-          <span class="tm-tick tm-tick--tr"></span>
-          <span class="tm-tick tm-tick--bl"></span>
-          <span class="tm-tick tm-tick--br"></span>
-
           <!-- Leaflet map -->
           <div id="flight-map"></div>
 
@@ -223,8 +221,6 @@
             maxZoom: 18,
           }).addTo(map);
 
-          map.fitBounds(points, { padding: [40, 40] });
-
           let polyline, markers = [];
 
           function animatePath() {
@@ -271,7 +267,11 @@
             setTimeout(drawStep, 1000);
           }
 
-          animatePath();
+          setTimeout(() => {
+            map.invalidateSize();
+            map.fitBounds(points, { padding: [40, 40] });
+            animatePath();
+          }, 100);
         } else {
           // No coordinates — cycle the card on an interval
           let cardIdx = 0;
