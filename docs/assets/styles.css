@@ -500,7 +500,7 @@ button { font-family: inherit; cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 28px 48px;
+  padding: 24px 48px;
   z-index: 10;
 }
 .gl-mark, .gl-nav a.gl-mark {
@@ -1060,9 +1060,11 @@ button { font-family: inherit; cursor: pointer; }
 }
 .gl-nav--page .gl-mark { color: var(--fg); }
 .gl-nav--page nav a { color: var(--fg); }
-.gl-nav--page nav a.is-current {
-  border-bottom: 1px solid var(--fg);
+.gl-nav--page nav a.is-current,
+.gl-nav nav a.is-current {
+  border-bottom: 1px solid currentColor;
   padding-bottom: 4px;
+  opacity: 1;
 }
 .gl-nav--page .gl-nav-cta {
   border-color: var(--fg);

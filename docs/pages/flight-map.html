@@ -18,6 +18,19 @@
     .tm-map-frame { position: relative; overflow: hidden; }
     /* Override leaflet defaults to blend with design */
     .leaflet-container { background: #F4F2EE; font-family: var(--mono, 'JetBrains Mono', monospace); }
+    .gl-home-strip {
+      background: var(--bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 48px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--fg);
+      flex-shrink: 0;
+      border-top: 1px solid var(--hairline);
+    }
   </style>
 </head>
 <body>
@@ -27,6 +40,7 @@
     <header class="gl-nav gl-nav--page">
       <a href="../index.html" class="gl-mark">MM</a>
       <nav>
+        <a href="../index.html">Home</a>
         <a href="tour-dates.html">Tour</a>
         <a href="flight-map.html" class="is-current">Map</a>
         <a href="about.html">About</a>
@@ -104,33 +118,16 @@
           <span class="tm-tick tm-tick--bl"></span>
           <span class="tm-tick tm-tick--br"></span>
 
-          <!-- Map metadata labels -->
-          <div class="tm-map-meta tm-map-meta--tl">
-            <div>PROJ · EQUIRECT</div>
-            <div>SCALE · 1:GLOBAL</div>
-          </div>
-          <div class="tm-map-meta tm-map-meta--tr">
-            <div>N 47.0 → 20.7</div>
-            <div>W 156.3 → E 25.4</div>
-          </div>
-          <div class="tm-map-meta tm-map-meta--bl">
-            <div>SOURCE · SHEETS</div>
-          </div>
-          <div class="tm-map-meta tm-map-meta--br" id="tm-updated">
-            <div>UPDATED · —</div>
-          </div>
-
           <!-- Leaflet map -->
           <div id="flight-map"></div>
 
-          <!-- Legend -->
-          <div class="tm-legend">
-            <div class="tm-legend-row"><span class="tm-leg-swatch tm-leg-swatch--public"></span> Public show</div>
-            <div class="tm-legend-row"><span class="tm-leg-swatch tm-leg-swatch--private"></span> Private</div>
-            <div class="tm-legend-row"><span class="tm-leg-swatch tm-leg-swatch--route"></span> Route, in order</div>
-          </div>
         </div>
       </div>
+    </div>
+
+    <div class="gl-home-strip">
+      <span>© <span id="map-year"></span> MARCUS MALDONADO</span>
+      <span>BUILT IN TEXAS</span>
     </div>
   </div>
 
@@ -138,6 +135,7 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    document.getElementById('map-year').textContent = new Date().getFullYear();
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
 
     // Identical to showData.js — confirmed working
@@ -205,10 +203,6 @@
         const weeksOut = Math.ceil(parseShowDate(lastShow.date).diff(dayjs(), 'day') / 7);
         document.getElementById('tm-lede').textContent    =
           `Over the next ${weeksOut} weeks, I have ${totalShows} shows across ${uniqueCities} ${uniqueCities === 1 ? 'city' : 'cities'}.`;
-
-        const now = new Date();
-        document.getElementById('tm-updated').innerHTML =
-          `<div>UPDATED · ${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}.${String(now.getFullYear()).slice(2)}</div>`;
 
         updateNowCard(shows[0], 0, totalShows, 0);
 

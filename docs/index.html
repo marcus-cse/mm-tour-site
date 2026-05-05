@@ -8,9 +8,21 @@
   <link rel="stylesheet" href="assets/styles.css">
   <style>
     html, body { height: 100%; overflow: hidden; }
-    .gl-root.gl-home-only { height: 100%; }
-    .gl-hero.gl-hero--full { height: 100%; min-height: 0; }
+    .gl-root.gl-home-only { height: 100%; display: flex; flex-direction: column; }
+    .gl-hero.gl-hero--full { flex: 1; min-height: 0; }
     .gl-hero-now-val, .gl-hero-now-sub { transition: opacity 0.4s; }
+    .gl-home-strip {
+      background: var(--bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 48px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--fg);
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -27,6 +39,7 @@
       <header class="gl-nav">
         <a href="index.html" class="gl-mark">MM</a>
         <nav>
+          <a href="index.html" class="is-current">Home</a>
           <a href="pages/tour-dates.html">Tour</a>
           <a href="pages/flight-map.html">Map</a>
           <a href="pages/about.html">About</a>
@@ -68,11 +81,17 @@
       </div>
 
     </section>
+
+    <div class="gl-home-strip">
+      <span>© <span id="home-year"></span> MARCUS MALDONADO</span>
+      <span>BUILT IN TEXAS</span>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
+document.getElementById('home-year').textContent = new Date().getFullYear();
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
 
     function parseShowDate(dateStr) {
