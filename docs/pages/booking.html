@@ -11,6 +11,11 @@
     .gl-nav--page { position: relative; flex-shrink: 0; }
     .gl-root.gl-page.gl-booking-simple { height: 100%; overflow: hidden; display: flex; flex-direction: column; }
     .gl-booking-hero { flex: 1; min-height: 0; }
+    
+    @media (max-width: 768px) {
+      html, body { overflow: auto; }
+      .gl-root.gl-page.gl-booking-simple { overflow: auto; height: auto; }
+    }
   </style>
 </head>
 <body>
