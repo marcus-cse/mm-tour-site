@@ -18,6 +18,12 @@
     .tm-map-frame { border: none; }
     #flight-map { width: 100%; height: 100%; }
     .tm-map-frame { position: relative; overflow: hidden; }
+    @media (max-width: 768px) {
+      html, body { height: auto; overflow: auto; }
+      .gl-root.gl-page.tm-page { height: auto; }
+      .tm-stage { flex: none; overflow: visible; }
+      #flight-map { height: 280px; }
+    }
     /* Override leaflet defaults to blend with design */
     .leaflet-container { background: #F4F2EE; font-family: var(--mono, 'JetBrains Mono', monospace); }
     .gl-home-strip {
@@ -50,7 +56,18 @@
         <a href="about.html">About</a>
       </nav>
       <a href="booking.html" class="gl-nav-cta">Inquire</a>
+      <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
     </header>
+    <div class="gl-nav-overlay" id="nav-overlay">
+      <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+      <a href="../index.html">Home</a>
+      <a href="tour-dates.html">Tour</a>
+      <a href="flight-map.html" class="is-current">Map</a>
+      <a href="about.html">About</a>
+      <a href="booking.html" class="gl-nav-overlay-cta">Inquire</a>
+    </div>
 
     <!-- Two-column stage -->
     <div class="tm-stage">
@@ -132,6 +149,7 @@
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="../assets/nav.js"></script>
   <script>
     document.getElementById('map-year').textContent = new Date().getFullYear();
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';

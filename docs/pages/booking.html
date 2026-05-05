@@ -27,7 +27,18 @@
         <a href="about.html">About</a>
       </nav>
       <a href="booking.html" class="gl-nav-cta">Inquire</a>
+      <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
     </header>
+    <div class="gl-nav-overlay" id="nav-overlay">
+      <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+      <a href="../index.html">Home</a>
+      <a href="tour-dates.html">Tour</a>
+      <a href="flight-map.html">Map</a>
+      <a href="about.html">About</a>
+      <a href="booking.html" class="gl-nav-overlay-cta is-current">Inquire</a>
+    </div>
 
     <!-- Booking hero -->
     <section class="gl-booking-hero">
@@ -85,5 +96,6 @@
     </footer>
 
   </div>
+  <script src="../assets/nav.js"></script>
 </body>
 </html>

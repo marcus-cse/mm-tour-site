@@ -45,7 +45,20 @@
           <a href="pages/about.html">About</a>
         </nav>
         <a href="pages/booking.html" class="gl-nav-cta">Inquire</a>
+        <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
       </header>
+
+      <!-- Mobile nav overlay -->
+      <div class="gl-nav-overlay" id="nav-overlay">
+        <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+        <a href="index.html" class="is-current">Home</a>
+        <a href="pages/tour-dates.html">Tour</a>
+        <a href="pages/flight-map.html">Map</a>
+        <a href="pages/about.html">About</a>
+        <a href="pages/booking.html" class="gl-nav-overlay-cta">Inquire</a>
+      </div>
 
       <!-- Hero text -->
       <div class="gl-hero-text">
@@ -90,6 +103,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="assets/nav.js"></script>
   <script>
 document.getElementById('home-year').textContent = new Date().getFullYear();
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';

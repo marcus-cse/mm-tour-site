@@ -1811,11 +1811,90 @@ button { font-family: inherit; cursor: pointer; }
 /* ============================================================
    RESPONSIVE — mobile-first overrides
    ============================================================ */
+/* Hamburger toggle — hidden on desktop */
+.gl-nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 1001;
+  position: relative;
+}
+.gl-nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.gl-nav-toggle.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.gl-nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+.gl-nav-toggle.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Hero nav: white hamburger */
+.gl-nav .gl-nav-toggle span { background: #fff; }
+/* Page nav: dark hamburger */
+.gl-nav--page .gl-nav-toggle span { background: var(--fg); }
+
+/* Mobile overlay */
+.gl-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 1000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px;
+  gap: 8px;
+}
+.gl-nav-overlay.is-open { display: flex; }
+.gl-nav-overlay a {
+  font-family: var(--display);
+  font-size: clamp(40px, 10vw, 72px);
+  color: var(--fg);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  opacity: 0.85;
+  text-transform: uppercase;
+}
+.gl-nav-overlay a:hover,
+.gl-nav-overlay a.is-current { opacity: 1; }
+.gl-nav-overlay a.is-current { border-bottom: 2px solid var(--fg); }
+.gl-nav-overlay-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--fg);
+  padding: 8px;
+  opacity: 0.6;
+}
+.gl-nav-overlay-close:hover { opacity: 1; }
+.gl-nav-overlay .gl-nav-overlay-cta {
+  margin-top: 32px;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--fg);
+  padding: 12px 24px;
+  border-radius: 999px;
+  opacity: 1;
+}
+
 @media (max-width: 768px) {
   /* Nav */
   .gl-nav, .gl-nav--page { padding: 20px 24px; }
   .gl-nav nav { display: none; }
   .gl-nav--page nav { display: none; }
+  .gl-nav-toggle { display: flex; }
 
   /* Hero */
   .gl-hero-text { left: 24px; right: 24px; bottom: 30%; }
@@ -1823,18 +1902,22 @@ button { font-family: inherit; cursor: pointer; }
   .gl-hero-now { text-align: left; }
 
   /* Stats strip */
-  .gl-stat-strip { grid-template-columns: 1fr 1fr; }
-  .gl-stat:nth-child(2) { border-right: none; }
-  .gl-stat-num { font-size: 56px; }
+  .gl-stat-strip { grid-template-columns: repeat(3, 1fr); }
+  .gl-stat { padding: 24px 12px; gap: 8px; flex-direction: column; align-items: flex-start; }
+  .gl-stat-num { font-size: 40px; }
 
   /* Tour filters */
   .gl-tour-page-filters { padding: 24px 24px 16px; flex-direction: column; align-items: flex-start; gap: 16px; }
 
   /* Tour rows */
-  .gl-tour-grouped { padding: 24px 24px 64px; gap: 40px; }
-  .gl-row { grid-template-columns: 40px 80px 1fr 100px; gap: 12px; padding: 20px 0; }
-  .gl-row-week, .gl-row-artist { display: none; }
-  .gl-row-day { font-size: 36px; }
+  .gl-tour-grouped { padding: 24px 16px 64px; gap: 40px; }
+  .gl-row { grid-template-columns: 60px 1fr 88px; gap: 16px; padding: 20px 0; }
+  .gl-row-i, .gl-row-week, .gl-row-artist { display: none; }
+  .gl-row-date { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .gl-row-day { font-size: 32px; }
+  .gl-row-mo { font-size: 10px; }
+  .gl-row-cta { justify-content: flex-end; }
+  .gl-row-tickets, .gl-row-private, .gl-row-public { width: 100%; padding: 8px 10px; font-size: 11px; white-space: nowrap; }
   .gl-row:hover { padding-left: 0; padding-right: 0; }
 
   /* Month head */
@@ -1872,7 +1955,7 @@ button { font-family: inherit; cursor: pointer; }
   /* Footer */
   .gl-footer { padding: 48px 24px 24px; }
   .gl-footer-top { grid-template-columns: 1fr; gap: 40px; }
-  .gl-footer-mark { font-size: 80px; }
+  .gl-footer-mark { font-size: 40px; }
   .gl-footer-cols { grid-template-columns: 1fr; gap: 24px; }
 
   /* CTA band */
@@ -1884,7 +1967,10 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 @media (max-width: 480px) {
-  .gl-stat-strip { grid-template-columns: 1fr 1fr; }
-  .gl-row { grid-template-columns: 32px 64px 1fr 80px; gap: 8px; }
+  .gl-stat-strip { grid-template-columns: repeat(3, 1fr); }
+  .gl-stat { padding: 20px 8px; }
+  .gl-stat-num { font-size: 32px; }
+  .gl-row { gap: 12px; }
+  .gl-row-day { font-size: 28px; }
   .gl-booking-headline { font-size: 56px; }
 }
