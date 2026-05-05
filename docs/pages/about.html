@@ -9,6 +9,23 @@
   <link rel="stylesheet" href="../assets/styles.css">
   <style>
     .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
+    .gl-scroll-hint {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      color: var(--fg);
+      opacity: 0.4;
+      transition: opacity 0.5s;
+      pointer-events: none;
+      z-index: 100;
+      animation: scroll-bounce 2s ease-in-out infinite;
+    }
+    .gl-scroll-hint.is-hidden { opacity: 0; }
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(7px); }
+    }
   </style>
 </head>
 <body>
@@ -173,5 +190,21 @@
     </footer>
 
   </div>
+
+  <div class="gl-scroll-hint" id="scroll-hint">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </div>
+
+  <script>
+    const hint = document.getElementById('scroll-hint');
+    function checkScroll() {
+      const nearBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 80;
+      hint.classList.toggle('is-hidden', nearBottom);
+    }
+    window.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
+  </script>
 </body>
 </html>
