@@ -4,16 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tour Map — Marcus Maldonado</title>
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
   <meta property="og:title" content="Tour Map — Marcus Maldonado" />
   <meta property="og:description" content="Interactive tour map for guitarist Marcus Maldonado." />
-  <meta property="og:image" content="https://marcus.band/assets/mm-backdrop.jpg" />
-  <meta property="og:url" content="https://marcus.band/pages/flight-map.html" />
+  <meta property="og:image" content="https://marcus.band/assets/img/mm-backdrop.jpg" />
+  <meta property="og:url" content="https://marcus.band/map/" />
   <meta property="og:type" content="website" />
-  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png" />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/styles.css">
-  <link rel="stylesheet" href="../assets/styles-tour-map.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/styles-tour-map.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     html, body { height: 100%; overflow: hidden; }
@@ -54,25 +54,25 @@
 
     <!-- Nav -->
     <header class="gl-nav gl-nav--page">
-      <a href="../index.html" class="gl-mark">MM</a>
+      <a href="../" class="gl-mark">MM</a>
       <nav>
-        <a href="../index.html">Home</a>
-        <a href="tour-dates.html">Tour</a>
-        <a href="flight-map.html" class="is-current">Map</a>
-        <a href="about.html">About</a>
+        <a href="../">Home</a>
+        <a href="../tour/">Tour</a>
+        <a href="./" class="is-current">Map</a>
+        <a href="../about/">About</a>
       </nav>
-      <a href="booking.html" class="gl-nav-cta">Inquire</a>
+      <a href="../booking/" class="gl-nav-cta">Inquire</a>
       <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
     </header>
     <div class="gl-nav-overlay" id="nav-overlay">
       <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
-      <a href="../index.html">Home</a>
-      <a href="tour-dates.html">Tour</a>
-      <a href="flight-map.html" class="is-current">Map</a>
-      <a href="about.html">About</a>
-      <a href="booking.html" class="gl-nav-overlay-cta">Inquire</a>
+      <a href="../">Home</a>
+      <a href="../tour/">Tour</a>
+      <a href="./" class="is-current">Map</a>
+      <a href="../about/">About</a>
+      <a href="../booking/" class="gl-nav-overlay-cta">Inquire</a>
     </div>
 
     <!-- Two-column stage -->
@@ -155,7 +155,7 @@
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="../assets/nav.js"></script>
+  <script src="../assets/js/nav.js"></script>
   <script>
     document.getElementById('map-year').textContent = new Date().getFullYear();
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
