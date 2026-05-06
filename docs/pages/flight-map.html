@@ -193,7 +193,7 @@
       document.getElementById('now-day').textContent    = fmtDay(show.date);
       document.getElementById('now-mo').textContent     = fmtMonth(show.date);
       document.getElementById('now-artist').textContent = show.artist;
-      document.getElementById('now-venue').textContent  = show.status === 'private' ? 'Private engagement' : show.venue;
+      document.getElementById('now-venue').textContent  = show.status === 'private' ? 'Private Event' : show.venue;
       document.getElementById('now-city').textContent   = show.city;
       document.getElementById('now-bar-fill').style.width = `${progress * 100}%`;
       document.getElementById('now-idx').textContent   = String(idx + 1).padStart(2, '0');
