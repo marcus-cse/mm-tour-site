@@ -4,15 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marcus Maldonado — Guitarist</title>
-  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-  <meta property="og:title" content="Marcus Maldonado — Guitarist" />
-  <meta property="og:description" content="Soulful, professional guitar performances for artists, weddings, and luxury experiences." />
-  <meta property="og:image" content="https://marcus.band/assets/img/mm-backdrop.jpg" />
-  <meta property="og:url" content="https://marcus.band" />
-  <meta property="og:type" content="website" />
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>window.MM_PAGE = {
+    ogUrl: 'https://marcus.band',
+    ogDescription: 'Soulful, professional guitar performances for artists, weddings, and luxury experiences.'
+  };</script>
+  <script src="assets/js/head.js"></script>
   <style>
     html, body { height: 100%; overflow: hidden; }
     .gl-root.gl-home-only { height: 100%; display: flex; flex-direction: column; }
@@ -111,38 +107,16 @@
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="assets/js/nav.js"></script>
+  <script src="assets/js/sheet.js"></script>
   <script>
-document.getElementById('home-year').textContent = new Date().getFullYear();
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
+    document.getElementById('home-year').textContent = new Date().getFullYear();
 
-    function parseShowDate(dateStr) {
-      return dayjs(`${dateStr} ${dayjs().year()}`);
-    }
-
-    const fmtDay   = d => parseShowDate(d).format('DD');
-    const fmtMonth = d => parseShowDate(d).format('MMM').toUpperCase();
-
-    fetch(SHEET_URL)
-      .then(r => r.text())
-      .then(text => {
-        const rows = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
-        const today = dayjs();
-        const shows = rows
-          .filter(r => r.date)
-          .map(r => ({
-            date: r.date,
-            artist: (r.artist || '').trim(),
-            venue: (r.venue || '').trim(),
-            city: `${(r.city || '').trim()}, ${(r.state || '').trim()}`,
-            status: (r.ticket_url || '').trim() ? 'tickets' : 'private',
-          }))
-          .filter(s => parseShowDate(s.date).isValid() && parseShowDate(s.date) >= today)
-          .sort((a, b) => parseShowDate(a.date) - parseShowDate(b.date));
-
+    MM.Shows.fetch()
+      .then(shows => {
         const next = shows[0];
         if (next) {
           document.getElementById('next-show-val').textContent =
-            `${fmtMonth(next.date)} ${fmtDay(next.date)} · ${next.artist}`;
+            `${MM.Shows.fmt.month(next.date)} ${MM.Shows.fmt.day(next.date)} · ${next.artist}`;
           document.getElementById('next-show-sub').textContent =
             next.status === 'private' ? 'Private engagement' : `${next.venue} — ${next.city}`;
         } else {
