@@ -4,15 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tour Dates — Marcus Maldonado</title>
-  <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico" />
-  <meta property="og:title" content="Tour Dates — Marcus Maldonado" />
-  <meta property="og:description" content="Upcoming shows and tour dates for guitarist Marcus Maldonado." />
-  <meta property="og:image" content="https://marcus.band/assets/img/mm-backdrop.jpg" />
-  <meta property="og:url" content="https://marcus.band/tour/" />
-  <meta property="og:type" content="website" />
-  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script>window.MM_PAGE = {
+    ogUrl: 'https://marcus.band/tour/',
+    ogDescription: 'Upcoming shows and tour dates for guitarist Marcus Maldonado.'
+  };</script>
+  <script src="../assets/js/head.js"></script>
   <style>
     .gl-root.gl-page { min-height: 100vh; }
     /* Loading skeleton */
@@ -84,67 +80,17 @@
       <div class="gl-loading">LOADING TOUR DATES…</div>
     </section>
 
-    <!-- Footer -->
-    <footer class="gl-footer">
-      <div class="gl-footer-top">
-        <div class="gl-footer-mark">MM</div>
-        <div class="gl-footer-cols">
-          <div>
-            <div class="gl-footer-label">CONTACT</div>
-            <div>marcus@marcian.live</div>
-          </div>
-          <div>
-            <div class="gl-footer-label">FOLLOW</div>
-            <a href="https://www.instagram.com/musicianmarcus/" target="_blank" rel="noopener noreferrer">Instagram</a>
-          </div>
-        </div>
-      </div>
-      <div class="gl-footer-bot">
-        <span>© <span id="footer-year"></span> MARCUS MALDONADO</span>
-        <span>BUILT IN TEXAS</span>
-      </div>
-    </footer>
+    <div id="footer-mount"></div>
 
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="../assets/js/nav.js"></script>
+  <script src="../assets/js/footer.js"></script>
+  <script src="../assets/js/sheet.js"></script>
   <script>
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
-
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
-
-    // Exact same pattern as the working showData.js
-    function parseShowDate(dateStr) {
-      return dayjs(`${dateStr} ${dayjs().year()}`);
-    }
-
-    function fmtDay(d)       { return parseShowDate(d).format('DD'); }
-    function fmtMonth(d)     { return parseShowDate(d).format('MMM').toUpperCase(); }
-    function fmtWeek(d)      { return parseShowDate(d).format('ddd').toUpperCase(); }
-    function fmtMonthYear(d) { return parseShowDate(d).format('MMMM YYYY').toUpperCase(); }
-
-    async function fetchShows() {
-      const response = await fetch(SHEET_URL);
-      const text = await response.text();
-      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-      return parsed.data;
-    }
-
-    function adaptShow(row) {
-      const hasTickets = (row.ticket_url || '').trim();
-      const isPublic   = String(row.is_public || '').toLowerCase() === 'true';
-      return {
-        date: row.date,
-        artist: (row.artist || '').trim(),
-        artistUrl: (row.artist_url || '').trim() || null,
-        venue: (row.venue || '').trim(),
-        city: `${(row.city || '').trim()}, ${(row.state || '').trim()}`,
-        status: hasTickets ? 'tickets' : isPublic ? 'public' : 'private',
-        url: hasTickets || null,
-      };
-    }
+    const { fmt } = MM.Shows;
 
     function rowHTML(show, globalIndex) {
       const isPrivate = show.status === 'private';
@@ -158,10 +104,10 @@
         <article class="gl-row${isPrivate ? ' gl-row--private' : ''}">
           <div class="gl-row-i">${String(globalIndex + 1).padStart(2, '0')}</div>
           <div class="gl-row-date">
-            <div class="gl-row-day">${fmtDay(show.date)}</div>
-            <div class="gl-row-mo">${fmtMonth(show.date)}</div>
+            <div class="gl-row-day">${fmt.day(show.date)}</div>
+            <div class="gl-row-mo">${fmt.month(show.date)}</div>
           </div>
-          <div class="gl-row-week">${fmtWeek(show.date)}</div>
+          <div class="gl-row-week">${fmt.week(show.date)}</div>
           <div class="gl-row-venue">
             <div class="gl-row-name">${isPrivate ? 'Private Event' : show.venue}</div>
             <div class="gl-row-city">${show.city}</div>
@@ -174,7 +120,7 @@
     function groupByMonth(shows) {
       const groups = {};
       shows.forEach(show => {
-        const key = fmtMonthYear(show.date);
+        const key = fmt.monthYear(show.date);
         if (!groups[key]) groups[key] = [];
         groups[key].push(show);
       });
@@ -226,14 +172,7 @@
       });
     }
 
-    fetchShows().then(rows => {
-        const today = dayjs();
-        const allShows = rows
-          .map(adaptShow)
-          .filter(s => s.date && parseShowDate(s.date).isValid() && parseShowDate(s.date) >= today)
-          .sort((a, b) => parseShowDate(a.date) - parseShowDate(b.date));
-
-        // Stats
+    MM.Shows.fetch().then(allShows => {
         const cities = new Set(allShows.map(s => s.city)).size;
         const acts   = new Set(allShows.map(s => s.artist)).size;
 
@@ -241,11 +180,9 @@
         document.getElementById('stat-regions').textContent = cities;
         document.getElementById('stat-acts').textContent    = acts;
 
-        // Filters
         const artists = [...new Set(allShows.map(s => s.artist))];
         renderFilters(artists, 'All', allShows);
 
-        // Shows
         renderGrouped(allShows, allShows);
       })
       .catch(err => {
