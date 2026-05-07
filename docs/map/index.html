@@ -208,15 +208,24 @@
 
           let polyline, markers = [];
 
+          const pastStyle    = { radius: 4, color: '#0A0A0A', fillColor: '#0A0A0A', fillOpacity: 1, weight: 1 };
+          const currentStyle = { radius: 6, color: '#0A0A0A', fillColor: '#C8A96E', fillOpacity: 1, weight: 2 };
+
+          function addStop(latlng) {
+            if (markers.length > 0) markers[markers.length - 1].setStyle(pastStyle);
+            const marker = L.circleMarker(latlng, currentStyle).addTo(map);
+            markers.push(marker);
+          }
+
           function fitToProgress(stepIdx) {
             const visible = points.slice(0, stepIdx + 1);
             if (visible.length === 1) {
-              map.flyTo(visible[0], 5, { duration: 1.2 });
+              map.flyTo(visible[0], 5, { duration: 0.7 });
             } else {
               map.flyToBounds(visible, {
                 padding: [60, 60],
                 maxZoom: 7,
-                duration: 1.2,
+                duration: 0.7,
               });
             }
           }
@@ -234,10 +243,7 @@
               dashArray: '6 5',
             }).addTo(map);
 
-            const firstMarker = L.circleMarker(points[0], {
-              radius: 5, color: '#0A0A0A', fillColor: '#C8A96E', fillOpacity: 1, weight: 2,
-            }).addTo(map);
-            markers.push(firstMarker);
+            addStop(points[0]);
             fitToProgress(0);
 
             updateNowCard(mapShows[0], shows.indexOf(mapShows[0]), totalShows, 0);
@@ -250,21 +256,17 @@
               }
 
               polyline.addLatLng(points[step]);
-
-              const marker = L.circleMarker(points[step], {
-                radius: 5, color: '#0A0A0A', fillColor: '#C8A96E', fillOpacity: 1, weight: 2,
-              }).addTo(map);
-              markers.push(marker);
+              addStop(points[step]);
               fitToProgress(step);
 
               const progress = step / (points.length - 1);
               updateNowCard(mapShows[step], shows.indexOf(mapShows[step]), totalShows, progress);
 
               step++;
-              setTimeout(drawStep, 1500);
+              setTimeout(drawStep, 2000);
             }
 
-            setTimeout(drawStep, 1500);
+            setTimeout(drawStep, 2000);
           }
 
           setTimeout(() => {
