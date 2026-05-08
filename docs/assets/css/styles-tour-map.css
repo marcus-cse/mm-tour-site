@@ -128,7 +128,7 @@
 .tm-pulse {
   display: inline-block;
   width: 7px; height: 7px;
-  background: var(--accent);
+  background: #C8A96E;
   border-radius: 50%;
   animation: tm-pulse 1.6s infinite;
 }
