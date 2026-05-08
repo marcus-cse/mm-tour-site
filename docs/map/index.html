@@ -26,6 +26,18 @@
       .tm-stage { flex: none; overflow: visible; }
       #flight-map { height: 280px; }
     }
+    @media (max-height: 960px) and (min-width: 769px) {
+      html, body { height: auto; overflow: auto; }
+      .gl-root.gl-page.tm-page { height: auto; }
+      .tm-stage { flex: none; overflow: visible; min-height: 800px; }
+      .tm-left { padding: 40px 40px 36px; }
+      .tm-title { font-size: 110px; }
+      .tm-lede { margin-top: 20px; }
+      .tm-stats { margin-top: 24px; padding: 16px 0; }
+      .tm-stat-num { font-size: 36px; }
+      .tm-now { padding-top: 20px; }
+      .tm-now-day { font-size: 44px; }
+    }
     /* Override leaflet defaults to blend with design */
     .leaflet-container { background: #F4F2EE; font-family: var(--mono, 'JetBrains Mono', monospace); }
     .gl-home-strip {
