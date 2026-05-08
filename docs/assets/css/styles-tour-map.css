@@ -111,7 +111,7 @@
   padding: 18px 22px 16px;
   background: var(--bg);
   border: 1px solid var(--hairline);
-  z-index: 1000;
+  z-index: 800;
   margin: 0;
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.10);
 }
