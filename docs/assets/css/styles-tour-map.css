@@ -319,3 +319,21 @@
   .tm-stats { margin-top: 24px; }
   .tm-now { margin-top: 28px; padding-top: 20px; }
 }
+
+/* Pulsing ring on the active map marker */
+.tm-pulse-marker { pointer-events: none; }
+.tm-pulse-ring {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  background: transparent;
+  animation: tm-pulse-ring 1.6s ease-out infinite;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+@keyframes tm-pulse-ring {
+  0%   { transform: scale(0.4); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
