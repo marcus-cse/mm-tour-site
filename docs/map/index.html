@@ -18,27 +18,13 @@
     .gl-root.gl-page.tm-page { height: 100%; display: flex; flex-direction: column; }
     .gl-nav--page { position: relative; flex-shrink: 0; }
     .tm-stage { flex: 1; min-height: 0; overflow: hidden; }
-    .tm-right { padding: 0; }
-    .tm-map-frame { border: none; }
     #flight-map { width: 100%; height: 100%; }
-    .tm-map-frame { position: relative; overflow: hidden; }
     @media (max-width: 768px) {
       html, body { height: auto; overflow: auto; }
       .gl-root.gl-page.tm-page { height: auto; }
       .tm-stage { flex: none; overflow: visible; }
-      #flight-map { height: 280px; }
-    }
-    @media (max-height: 960px) and (min-width: 769px) {
-      html, body { height: auto; overflow: auto; }
-      .gl-root.gl-page.tm-page { height: auto; }
-      .tm-stage { flex: none; overflow: visible; min-height: 800px; }
-      .tm-left { padding: 40px 40px 36px; }
-      .tm-title { font-size: 110px; }
-      .tm-lede { margin-top: 20px; }
-      .tm-stats { margin-top: 24px; padding: 16px 0; }
-      .tm-stat-num { font-size: 36px; }
-      .tm-now { padding-top: 20px; }
-      .tm-now-day { font-size: 44px; }
+      .tm-right { display: flex; flex-direction: column; height: auto; }
+      .tm-map-frame { position: relative; height: 320px; flex-shrink: 0; }
     }
     /* Override leaflet defaults to blend with design */
     .leaflet-container { background: #F4F2EE; font-family: var(--mono, 'JetBrains Mono', monospace); }
@@ -85,24 +71,25 @@
       <a href="../booking/" class="gl-nav-overlay-cta">Inquire</a>
     </div>
 
-    <!-- Two-column stage -->
+    <!-- Dashboard stage: header bar on top, full-width map below with Now Playing overlay -->
     <div class="tm-stage">
 
-      <!-- LEFT: title + stats + now playing -->
-      <div class="tm-left">
-        <div class="tm-eyebrow">
-          <span>TOUR MAP</span>
-          <span id="tm-season">2026 SEASON</span>
+      <!-- HEADER: brand + stats -->
+      <header class="tm-left">
+        <div class="tm-brand">
+          <div class="tm-eyebrow">
+            <span>TOUR MAP</span>
+            <span id="tm-season">2026 SEASON</span>
+          </div>
+
+          <h1 class="tm-title">
+            ON THE <em>ROAD.</em>
+          </h1>
+
+          <p class="tm-lede" id="tm-lede">
+            Loading tour dates…
+          </p>
         </div>
-
-        <h1 class="tm-title">
-          ON THE<br>
-          <em>ROAD.</em>
-        </h1>
-
-        <p class="tm-lede" id="tm-lede">
-          Loading tour dates…
-        </p>
 
         <div class="tm-stats">
           <div class="tm-stat">
@@ -118,8 +105,14 @@
             <div class="tm-stat-lbl">Acts</div>
           </div>
         </div>
+      </header>
 
-        <!-- Now playing card -->
+      <!-- CANVAS: map with Now Playing card as floating overlay (or stacked card on mobile) -->
+      <div class="tm-right">
+        <div class="tm-map-frame">
+          <div id="flight-map"></div>
+        </div>
+
         <div class="tm-now">
           <div class="tm-now-label">
             NOW PLAYING <span class="tm-pulse"></span>
@@ -143,15 +136,6 @@
             <span>/</span>
             <span id="now-total">—</span>
           </div>
-        </div>
-      </div>
-
-      <!-- RIGHT: SVG map -->
-      <div class="tm-right">
-        <div class="tm-map-frame">
-          <!-- Leaflet map -->
-          <div id="flight-map"></div>
-
         </div>
       </div>
     </div>
@@ -217,22 +201,45 @@
         const lastShow = shows[shows.length - 1];
         const weeksOut = Math.ceil(MM.Shows.parseDate(lastShow.date).diff(dayjs(), 'day') / 7);
         document.getElementById('tm-lede').textContent    =
-          `Over the next ${weeksOut} weeks, I have ${totalShows} shows across ${uniqueCities} ${uniqueCities === 1 ? 'city' : 'cities'}.`;
+          `Over the next ${weeksOut} weeks, Marcus has ${totalShows} shows across ${uniqueCities} ${uniqueCities === 1 ? 'city' : 'cities'}.`;
 
         updateNowCard(shows[0], 0, totalShows, 0);
 
         if (mapShows.length > 0) {
           const points = mapShows.map(s => [s.lat, s.lng]);
 
+          // Ghost route — drawn once, persists for the session.
+          // Visible during the Dallas → stop-1 fly so the route arrives into frame.
+          L.polyline(points, {
+            color: '#0A0A0A',
+            weight: 1,
+            opacity: 0.18,
+            dashArray: '2 4',
+            interactive: false,
+          }).addTo(map);
+
           let polyline, markers = [];
 
           const pastStyle    = { radius: 4, color: '#0A0A0A', fillColor: '#0A0A0A', fillOpacity: 1, weight: 1 };
           const currentStyle = { radius: 6, color: '#0A0A0A', fillColor: '#C8A96E', fillOpacity: 1, weight: 2 };
 
+          const pulseIcon = L.divIcon({
+            className: 'tm-pulse-marker',
+            html: '<span class="tm-pulse-ring"></span>',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+          });
+          let pulseMarker = null;
+
           function addStop(latlng) {
             if (markers.length > 0) markers[markers.length - 1].setStyle(pastStyle);
             const marker = L.circleMarker(latlng, currentStyle).addTo(map);
             markers.push(marker);
+            if (!pulseMarker) {
+              pulseMarker = L.marker(latlng, { icon: pulseIcon, interactive: false, keyboard: false }).addTo(map);
+            } else {
+              pulseMarker.setLatLng(latlng);
+            }
           }
 
           function fitToProgress(stepIdx) {
