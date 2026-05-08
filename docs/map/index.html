@@ -182,6 +182,24 @@
       document.getElementById('now-total').textContent = String(total).padStart(2, '0');
     }
 
+    // Mount the map immediately on a Dallas centroid so the user sees tiles
+    // while data is fetching. fitToProgress(0) will fly to stop 1 once data lands.
+    const DALLAS = [32.7767, -96.7970];
+    const map = L.map('flight-map', {
+      zoomControl: false,
+      attributionControl: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      touchZoom: false,
+      boxZoom: false,
+      dragging: false,
+    });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 18,
+    }).addTo(map);
+    map.setView(DALLAS, 5);
+    setTimeout(() => map.invalidateSize(), 100);
+
     MM.Shows.fetch().then(shows => {
         const mapShows = shows.filter(s => !isNaN(s.lat) && !isNaN(s.lng));
 
@@ -205,20 +223,6 @@
 
         if (mapShows.length > 0) {
           const points = mapShows.map(s => [s.lat, s.lng]);
-
-          const map = L.map('flight-map', {
-            zoomControl: false,
-            attributionControl: false,
-            scrollWheelZoom: false,
-            doubleClickZoom: false,
-            touchZoom: false,
-            boxZoom: false,
-            dragging: false,
-          });
-
-          L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 18,
-          }).addTo(map);
 
           let polyline, markers = [];
 
@@ -280,14 +284,11 @@
               setTimeout(drawStep, 2000);
             }
 
-            setTimeout(drawStep, 2000);
+            setTimeout(drawStep, 2000);  // stop 1 hold — same cadence as every step
           }
 
-          setTimeout(() => {
-            map.invalidateSize();
-            map.setView(points[0], 5);
-            animatePath();
-          }, 100);
+          map.invalidateSize();
+          animatePath();
         } else {
           // No coordinates — cycle the card on an interval
           let cardIdx = 0;
