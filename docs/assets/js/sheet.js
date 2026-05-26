@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: MIT · © 2026 Marcus Maldonado · https://marcus.band */
 (function() {
   const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1emqiAiZPufCuJ0n9bkewzMdNzRAea9sJopSlLKkdqcs/export?format=csv';
 

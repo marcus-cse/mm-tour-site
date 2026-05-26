@@ -55,3 +55,11 @@ Tour dates live in [this Google Sheet](https://docs.google.com/spreadsheets/d/1e
 | `ticket_url` | Link to tickets (optional) |
 | `is_public` | `true` for public shows without ticket links |
 | `latitude` / `longitude` | City centroids for map plotting |
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE) — © 2026 Marcus Maldonado.
+
+Reuse is welcome. If you (or a tool you're using) borrow code or content from this repo, please retain the copyright notice and attribute back to [marcus.band](https://marcus.band).

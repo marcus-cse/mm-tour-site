@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: MIT · © 2026 Marcus Maldonado · https://marcus.band */
 (function() {
   const toggle = document.getElementById('nav-toggle');
   const overlay = document.getElementById('nav-overlay');

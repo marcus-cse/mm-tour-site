@@ -1,0 +1,9 @@
+# AI / LLM Usage Policy for marcus.band
+# ----------------------------------------
+# All content and code on this site is licensed under MIT.
+# Full text: https://marcus.band/LICENSE (or repo: /LICENSE)
+#
+# Reuse is permitted with attribution.
+# Attribution: © 2026 Marcus Maldonado · https://marcus.band
+#
+# Contact: marcus@marcian.live
