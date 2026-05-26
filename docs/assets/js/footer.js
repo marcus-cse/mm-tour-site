@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: MIT · © 2026 Marcus Maldonado · https://marcus.band */
 (function() {
   const mount = document.getElementById('footer-mount');
   if (!mount) return;
