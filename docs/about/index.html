@@ -33,9 +33,57 @@
   }
   </script>
   <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png" />
+  <link rel="preload" as="image" href="../assets/img/mm-portrait-1.jpg" fetchpriority="high" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <style>
+    #mm-preloader {
+      position: fixed; inset: 0;
+      background: #F4F2EE;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transition: opacity 0.4s ease-out;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    #mm-preloader.is-done { opacity: 0; pointer-events: none; }
+    .mm-preloader-mark {
+      font-family: "Anton", "Bebas Neue", sans-serif;
+      font-size: 48px;
+      letter-spacing: -0.02em;
+      color: #0A0A0A;
+      line-height: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease-in;
+    }
+    #mm-preloader.font-ready .mm-preloader-mark { opacity: 1; }
+    .mm-preloader-bar {
+      width: 60px; height: 2px;
+      background: #C8A96E;
+      transform-origin: left center;
+      animation: mm-preloader-bar 1.4s ease-in-out infinite;
+    }
+    @keyframes mm-preloader-bar {
+      0%     { transform: scaleX(0); }
+      50%    { transform: scaleX(1); }
+      50.01% { transform-origin: right center; }
+      100%   { transform: scaleX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mm-preloader-bar { animation: mm-preloader-bar-fade 1.4s ease-in-out infinite; }
+      @keyframes mm-preloader-bar-fade {
+        0%, 100% { opacity: 0.3; }
+        50%     { opacity: 1; }
+      }
+    }
+  </style>
   <script src="../assets/js/head.js"></script>
   <style>
     .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
+    .gl-press-artist a:hover { text-decoration: underline; text-underline-offset: 3px; }
     .gl-scroll-hint {
       position: fixed;
       bottom: 32px;
@@ -57,6 +105,11 @@
   </style>
 </head>
 <body>
+  <div id="mm-preloader" aria-hidden="true">
+    <div class="mm-preloader-mark">MM</div>
+    <div class="mm-preloader-bar"></div>
+  </div>
+
   <div class="gl-root gl-page">
 
     <!-- Nav -->
@@ -93,7 +146,7 @@
         </h1>
       </div>
       <div class="gl-about-cover-img">
-        <img src="../assets/img/mm-portrait-1.jpg" alt="Marcus Maldonado portrait" />
+        <img src="../assets/img/mm-portrait-1.jpg" alt="Marcus Maldonado portrait" fetchpriority="high" decoding="sync" />
       </div>
     </section>
 
@@ -207,14 +260,21 @@
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist">Don Louis</div>
+              <div class="gl-press-artist"><a href="https://www.donlouismusic.com/" target="_blank" rel="noopener noreferrer">Don Louis</a></div>
               <div class="gl-press-role">Lead Guitarist</div>
             </div>
             <div class="gl-press-r">Currently on tour.</div>
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist">AURA</div>
+              <div class="gl-press-artist"><a href="https://coffeyanderson.com/" target="_blank" rel="noopener noreferrer">Coffey Anderson</a></div>
+              <div class="gl-press-role">Lead Guitarist (2nd String)</div>
+            </div>
+            <div class="gl-press-r">Sub for the main guitarist on occasion.</div>
+          </div>
+          <div class="gl-press-row">
+            <div>
+              <div class="gl-press-artist"><a href="https://auramusic.band/" target="_blank" rel="noopener noreferrer">AURA</a></div>
               <div class="gl-press-role">Lead Guitarist</div>
             </div>
             <div class="gl-press-r">Luxury weddings and corporate events.</div>
@@ -235,7 +295,7 @@
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist">Bellos Audio</div>
+              <div class="gl-press-artist"><a href="https://bellosaudio.com/" target="_blank" rel="noopener noreferrer">Bellos Audio</a></div>
               <div class="gl-press-role">Artist</div>
             </div>
             <div class="gl-press-r">The best in-ears I've ever owned.</div>
@@ -265,6 +325,26 @@
     </svg>
   </div>
 
-
+  <script>
+    (function() {
+      const el = document.getElementById('mm-preloader');
+      if (!el) return;
+      if (document.fonts && document.fonts.load) {
+        document.fonts.load('400 48px Anton').finally(() => el.classList.add('font-ready'));
+      } else {
+        el.classList.add('font-ready');
+      }
+      let done = false;
+      const reveal = () => {
+        if (done) return;
+        done = true;
+        el.classList.add('is-done');
+        setTimeout(() => el.remove(), 500);
+      };
+      if (document.readyState === 'complete') { reveal(); return; }
+      window.addEventListener('load', reveal, { once: true });
+      setTimeout(reveal, 4000); // hard cap in case a CDN hangs
+    })();
+  </script>
 </body>
 </html>
