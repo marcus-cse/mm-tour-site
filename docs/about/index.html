@@ -242,22 +242,81 @@
       </div>
     </section>
 
+    <!-- The guitars -->
+    <section class="gl-guitars">
+      <div class="gl-guitars-portrait">
+        <img src="../assets/img/mm-portrait-2.jpg" alt="Marcus Maldonado playing guitar" loading="lazy" decoding="async" />
+      </div>
+      <div class="gl-guitars-body">
+      <div class="gl-guitars-topbar">
+        <span>— THE GUITARS</span>
+        <span><span data-years-since="2013"></span> YEARS A PRS PLAYER · 2026 PULSE APPLICANT</span>
+      </div>
+
+      <div class="gl-guitars-lede">
+        <h2 class="gl-guitars-title">Same brand<br>for <em><span data-years-since="2013"></span> years</em>.</h2>
+        <div class="gl-guitars-lede-r">
+          <p>Marcus considers Paul Reed Smith to be the "Steve Jobs" of guitars: a founder who never delegated the details, who treats manufacturing as a design problem, and who ships instruments that are consistent because the process behind them is.</p>
+          <div class="gl-guitars-status">
+            <span class="gl-guitars-k">Where things stand</span>
+            No sponsorship, no endorsement, no comped gear — he paid for all his instruments. He applied for the 2026 Pulse Artist class through his authorized PRS dealer, and he'll keep recommending these instruments either way.
+          </div>
+        </div>
+      </div>
+
+      <div class="gl-guitars-beats">
+        <div class="gl-guitars-beat">
+          <span class="gl-guitars-k">The spark</span>
+          <p>Santana with a PRS. The guitar didn't read as equipment, it read as part of the music. But Marcus couldn't afford one back in the day.</p>
+        </div>
+        <div class="gl-guitars-beat">
+          <span class="gl-guitars-k">Age 16</span>
+          <p>His family pooled what they could and bought him an SE 245. It was real money for his family. <span data-years-since="2013"></span> years later it's still in the rotation, and it set the standard.</p>
+        </div>
+        <div class="gl-guitars-beat">
+          <span class="gl-guitars-k">Since then</span>
+          <p>5 PRS guitars, bought one at a time as the work grew — three Core, two SE. They've held up through festival main stages, a ten-day run in Greece, and a Texas circuit that never lets up.</p>
+        </div>
+      </div>
+
+      <div class="gl-guitars-railhead">
+        <span>— THE RACK</span>
+        <span>5 INSTRUMENTS</span>
+      </div>
+      <div class="gl-guitars-rail">
+        <figure class="gl-guitars-card">
+          <div class="gl-guitars-img"><img src="../assets/img/prs_se_245.jpg" alt="PRS SE 245 electric guitar" loading="lazy" decoding="async"></div>
+          <figcaption><span class="gl-guitars-num">01</span><span class="gl-guitars-model">PRS SE 245</span><span class="gl-guitars-year">2013</span></figcaption>
+        </figure>
+        <figure class="gl-guitars-card">
+          <div class="gl-guitars-img"><img src="../assets/img/prs_special_semi.jpg" alt="PRS Special Semi-Hollow electric guitar" loading="lazy" decoding="async"></div>
+          <figcaption><span class="gl-guitars-num">02</span><span class="gl-guitars-model">PRS Special Semi-Hollow</span><span class="gl-guitars-year">2020</span></figcaption>
+        </figure>
+        <figure class="gl-guitars-card">
+          <div class="gl-guitars-img"><img src="../assets/img/prs_se_ss.jpeg" alt="PRS SE Silver Sky electric guitar" loading="lazy" decoding="async"></div>
+          <figcaption><span class="gl-guitars-num">03</span><span class="gl-guitars-model">PRS SE Silver Sky</span><span class="gl-guitars-year">2022</span></figcaption>
+        </figure>
+        <figure class="gl-guitars-card">
+          <div class="gl-guitars-img"><img src="../assets/img/prs_custom_24.webp" alt="PRS Custom 24 electric guitar" loading="lazy" decoding="async"></div>
+          <figcaption><span class="gl-guitars-num">04</span><span class="gl-guitars-model">PRS Custom 24</span><span class="gl-guitars-year">2023</span></figcaption>
+        </figure>
+        <figure class="gl-guitars-card">
+          <div class="gl-guitars-img"><img src="../assets/img/prs_fiore.jpeg" alt="PRS Fiore electric guitar" loading="lazy" decoding="async"></div>
+          <figcaption><span class="gl-guitars-num">05</span><span class="gl-guitars-model">PRS Fiore</span><span class="gl-guitars-year">2026</span></figcaption>
+        </figure>
+      </div>
+      </div>
+    </section>
+
     <!-- Credits + portrait -->
     <section class="gl-credits-portrait">
       <div class="gl-credits-photo">
-        <img src="../assets/img/mm-portrait-2.jpg" alt="Marcus Maldonado live" class="gl-credits-img" />
+        <img src="../assets/img/mm-portrait-3.JPG" alt="Marcus Maldonado live" class="gl-credits-img" />
       </div>
       <div class="gl-credits-text">
         <div class="gl-mono" style="color:var(--muted);">— CREDITS</div>
         <h2 class="gl-section-title">Acts &amp;<br>partners.</h2>
         <div class="gl-press">
-          <div class="gl-press-row">
-            <div>
-              <div class="gl-press-artist">MARCIAN ENTERTAINMENT</div>
-              <div class="gl-press-role">Owner, Founder</div>
-            </div>
-            <div class="gl-press-r">An emerging live music entertainment company.</div>
-          </div>
           <div class="gl-press-row">
             <div>
               <div class="gl-press-artist"><a href="https://www.donlouismusic.com/" target="_blank" rel="noopener noreferrer">Don Louis</a></div>
@@ -300,6 +359,13 @@
             </div>
             <div class="gl-press-r">The best in-ears I've ever owned.</div>
           </div>
+          <div class="gl-press-row">
+            <div>
+              <div class="gl-press-artist">MARCIAN ENTERTAINMENT</div>
+              <div class="gl-press-role">Owner, Founder</div>
+            </div>
+            <div class="gl-press-r">An emerging live music entertainment company.</div>
+          </div>
         </div>
       </div>
     </section>
@@ -310,6 +376,29 @@
 
   <script src="../assets/js/nav.js"></script>
   <script src="../assets/js/footer.js"></script>
+  <script>
+    document.querySelectorAll('[data-years-since]').forEach(el => {
+      const start = parseInt(el.dataset.yearsSince, 10);
+      if (!isNaN(start)) el.textContent = new Date().getFullYear() - start;
+    });
+
+    // Fade rail edges only when there's more to scroll toward
+    (function () {
+      const rail = document.querySelector('.gl-guitars-rail');
+      if (!rail) return;
+      const update = () => {
+        const maxScroll = rail.scrollWidth - rail.clientWidth;
+        if (maxScroll <= 4) { rail.removeAttribute('data-scroll'); return; }
+        if (rail.scrollLeft <= 4) rail.dataset.scroll = 'start';
+        else if (rail.scrollLeft >= maxScroll - 4) rail.dataset.scroll = 'end';
+        else rail.dataset.scroll = 'middle';
+      };
+      rail.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>
+
   <script>
     const hint = document.getElementById('scroll-hint');
     function checkScroll() {
