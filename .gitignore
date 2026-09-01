@@ -1,2 +1,4 @@
 .DS_Store
 /uncommitted
+/.venv
+/.playwright-mcp

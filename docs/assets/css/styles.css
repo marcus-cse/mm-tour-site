@@ -1010,7 +1010,7 @@ button { font-family: inherit; cursor: pointer; }
   position: relative;
   background: var(--bg-2);
   overflow: hidden;
-  aspect-ratio: 4519 / 6775;
+  aspect-ratio: 3 / 4;
 }
 .gl-credits-img {
   width: 100%;
@@ -1973,4 +1973,46 @@ button { font-family: inherit; cursor: pointer; }
   .gl-row { gap: 12px; }
   .gl-row-day { font-size: 28px; }
   .gl-booking-headline { font-size: 56px; }
+}
+
+/* THE GUITARS — About page */
+.gl-guitars { --dim: var(--muted); display: grid; grid-template-columns: minmax(280px, 0.45fr) 1fr; align-items: stretch; padding: 40px 0; border-bottom: 1px solid var(--hairline); }
+.gl-guitars-portrait { position: relative; align-self: stretch; overflow: hidden; }
+.gl-guitars-portrait img { position: absolute; top: 0; left: 48px; width: calc(100% - 48px); height: 100%; object-fit: cover; object-position: center 30%; display: block; }
+.gl-guitars-body { display: flex; flex-direction: column; min-width: 0; }
+.gl-guitars-topbar,
+.gl-guitars-railhead { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 24px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); padding: 0 48px; }
+.gl-guitars-topbar { padding: 22px 48px 6px; }
+.gl-guitars-lede { display: grid; grid-template-columns: 1fr 1.05fr; gap: 40px; align-items: start; padding: 12px 48px 28px; }
+.gl-guitars-title { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(44px, 5.3vw, 76px); line-height: 0.9; letter-spacing: -0.025em; margin: 0; }
+.gl-guitars-title em { font-style: normal; -webkit-text-stroke: 1.4px var(--fg); color: transparent; }
+.gl-guitars-lede-r p { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: var(--fg-2); text-wrap: pretty; }
+.gl-guitars-status { font-size: 12.5px; line-height: 1.5; color: var(--dim); padding-top: 12px; border-top: 1px solid var(--hairline); }
+.gl-guitars-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: 8px; }
+.gl-guitars-beats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 24px 48px 28px; }
+.gl-guitars-beat p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--fg-2); text-wrap: pretty; }
+.gl-guitars-railhead { padding-top: 22px; padding-bottom: 12px; }
+.gl-guitars-rail { --edge: 48px; display: flex; gap: 20px; overflow-x: auto; padding: 0 48px 10px; scroll-snap-type: x mandatory; scroll-padding: 0 48px; scrollbar-width: thin; -webkit-mask-image: linear-gradient(to right, black, black); mask-image: linear-gradient(to right, black, black); transition: -webkit-mask-image 0.2s, mask-image 0.2s; }
+.gl-guitars-rail[data-scroll="middle"] { -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--edge), black calc(100% - var(--edge)), transparent 100%); mask-image: linear-gradient(to right, transparent 0, black var(--edge), black calc(100% - var(--edge)), transparent 100%); }
+.gl-guitars-rail[data-scroll="start"] { -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - var(--edge)), transparent 100%); mask-image: linear-gradient(to right, black 0, black calc(100% - var(--edge)), transparent 100%); }
+.gl-guitars-rail[data-scroll="end"] { -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--edge), black 100%); mask-image: linear-gradient(to right, transparent 0, black var(--edge), black 100%); }
+.gl-guitars-rail::-webkit-scrollbar { height: 6px; }
+.gl-guitars-rail::-webkit-scrollbar-track { background: var(--hairline); }
+.gl-guitars-rail::-webkit-scrollbar-thumb { background: var(--fg); }
+.gl-guitars-card { flex: 0 0 320px; margin: 0; scroll-snap-align: start; border-top: 1px solid var(--hairline); }
+.gl-guitars-rail > .gl-guitars-card:first-child { margin-left: auto; }
+.gl-guitars-rail > .gl-guitars-card:last-child { margin-right: auto; }
+.gl-guitars-img { width: 100%; aspect-ratio: 29/10; background: var(--bg-2); overflow: hidden; }
+.gl-guitars-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gl-guitars-card figcaption { padding: 10px 12px 0; display: flex; align-items: baseline; gap: 10px; }
+.gl-guitars-num,
+.gl-guitars-year { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--dim); }
+.gl-guitars-model { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; margin-right: auto; }
+@media (max-width: 900px) {
+  .gl-guitars { grid-template-columns: 1fr; }
+  .gl-guitars-portrait { height: 320px; }
+  .gl-guitars-portrait img { position: static; width: 100%; left: auto; }
+  .gl-guitars-topbar > span:nth-child(2) { display: none; }
+  .gl-guitars-lede { grid-template-columns: 1fr; gap: 28px; }
+  .gl-guitars-beats { grid-template-columns: 1fr; gap: 24px; }
 }
