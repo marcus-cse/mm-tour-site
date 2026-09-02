@@ -1000,13 +1000,14 @@ button { font-family: inherit; cursor: pointer; }
 
 .gl-credits-portrait {
   display: grid;
-  grid-template-columns: minmax(360px, 1fr) 1.4fr;
+  grid-template-columns: 1.4fr minmax(360px, 1fr);
   gap: 64px;
   padding: 56px 48px;
   border-bottom: 1px solid var(--hairline);
   align-items: start;
 }
 .gl-credits-photo {
+  order: 2;
   position: relative;
   background: var(--bg-2);
   overflow: hidden;
@@ -1947,6 +1948,8 @@ button { font-family: inherit; cursor: pointer; }
 
   /* Credits */
   .gl-credits-portrait { grid-template-columns: 1fr; padding: 64px 24px; }
+  .gl-credits-photo { order: initial; }
+  .gl-press-row { grid-template-columns: 1fr; gap: 6px; }
 
   /* Booking hero */
   .gl-booking-hero { grid-template-columns: 1fr; padding: 64px 24px; }
@@ -1987,7 +1990,7 @@ button { font-family: inherit; cursor: pointer; }
 .gl-guitars-title { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(44px, 5.3vw, 76px); line-height: 0.9; letter-spacing: -0.025em; margin: 0; }
 .gl-guitars-title em { font-style: normal; -webkit-text-stroke: 1.4px var(--fg); color: transparent; }
 .gl-guitars-lede-r p { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: var(--fg-2); text-wrap: pretty; }
-.gl-guitars-status { font-size: 12.5px; line-height: 1.5; color: var(--dim); padding-top: 12px; border-top: 1px solid var(--hairline); }
+.gl-guitars-status { font-size: 12.5px; line-height: 1.5; color: var(--fg-2); background: var(--bg-2); border: 1px solid var(--hairline); padding: 16px 18px; margin-top: 12px; }
 .gl-guitars-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: 8px; }
 .gl-guitars-beats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 24px 48px 28px; }
 .gl-guitars-beat p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--fg-2); text-wrap: pretty; }

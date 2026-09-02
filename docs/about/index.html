@@ -84,6 +84,83 @@
   <style>
     .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
     .gl-press-artist a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .gl-press-arrow { font-size: 0.7em; opacity: 0.5; display: inline-block; transition: opacity 0.15s, transform 0.15s; }
+    .gl-press-artist a:hover .gl-press-arrow { opacity: 1; transform: translate(1px, -1px); }
+
+    .gl-info-wrap { display: inline; }
+    .gl-info-trigger { position: relative; display: inline-flex; align-items: center; vertical-align: middle; margin-left: 4px; }
+    .gl-info-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 15px; height: 15px; flex-shrink: 0;
+      border: 1px solid var(--muted); border-radius: 50%;
+      background: transparent; color: var(--muted);
+      font-family: var(--mono, monospace); font-size: 9px; font-style: normal; line-height: 1;
+      padding: 0; cursor: pointer;
+      transform: translateY(-1px);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .gl-info-btn:hover,
+    .gl-info-btn:focus-visible,
+    .gl-info-trigger.is-open .gl-info-btn { border-color: var(--fg); color: var(--fg); }
+    .gl-info-popover {
+      position: absolute; bottom: calc(100% + 10px); left: 50%;
+      min-width: 220px; max-width: 280px; min-height: 40px;
+      background: var(--bg); border: 1px solid var(--hairline);
+      box-shadow: 0 10px 28px rgba(10, 10, 10, 0.14);
+      padding: 14px 16px; font-size: 12px; line-height: 1.5; font-weight: 400;
+      color: var(--fg-2); text-transform: none; letter-spacing: normal;
+      z-index: 20; opacity: 0; visibility: hidden; pointer-events: none;
+      transform: translate(-50%, 4px);
+      transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    }
+    /* Invisible bridge so the mouse can cross the gap between the icon and the popover
+       without the hover state dropping mid-transit. */
+    .gl-info-popover::after {
+      content: ''; position: absolute; left: 0; right: 0;
+      top: 100%; height: 14px; pointer-events: auto;
+    }
+    .gl-info-trigger:hover .gl-info-popover,
+    .gl-info-trigger:focus-within .gl-info-popover,
+    .gl-info-trigger.is-open .gl-info-popover {
+      opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, 0);
+    }
+
+    .gl-info-popover--wide { min-width: 320px; max-width: min(400px, calc(100vw - 48px)); }
+    .gl-info-popover--compact { min-width: 190px; width: max-content; max-width: none; min-height: 0; padding: 10px 14px; }
+    .gl-info-eyebrow {
+      font-family: var(--mono, monospace); font-size: 9px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid var(--hairline);
+    }
+    .gl-info-eyebrow--solo { margin: 0; padding: 0; border-bottom: none; white-space: nowrap; text-align: center; }
+    .gl-info-artist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+    .gl-info-artist-grid a {
+      font-size: 12px; font-weight: 500; color: var(--fg-2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: color 0.15s;
+    }
+    .gl-info-artist-grid a:hover { color: var(--fg); text-decoration: underline; text-underline-offset: 2px; }
+    .gl-info-more { font-size: 12px; font-style: italic; color: var(--muted); }
+    .gl-info-body { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--fg-2); }
+    @media (max-width: 420px) {
+      .gl-info-artist-grid { grid-template-columns: 1fr; }
+    }
+    /* On narrow viewports, anchor the popover to the full row instead of centering on the
+       tiny icon — an icon-centered popover can run off-screen when the icon sits near an edge. */
+    @media (max-width: 768px) {
+      .gl-press-row { position: relative; }
+      .gl-info-trigger:not(.gl-info-trigger--compact) { position: static; }
+      .gl-info-popover:not(.gl-info-popover--compact) {
+        left: 8px; right: 8px; margin: 0;
+        min-width: 0; max-width: none; width: auto;
+        transform: translateY(4px);
+      }
+      .gl-info-trigger:hover .gl-info-popover:not(.gl-info-popover--compact),
+      .gl-info-trigger:focus-within .gl-info-popover:not(.gl-info-popover--compact),
+      .gl-info-trigger.is-open .gl-info-popover:not(.gl-info-popover--compact) {
+        transform: translateY(0);
+      }
+    }
     .gl-scroll-hint {
       position: fixed;
       bottom: 32px;
@@ -319,49 +396,94 @@
         <div class="gl-press">
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist"><a href="https://www.donlouismusic.com/" target="_blank" rel="noopener noreferrer">Don Louis</a></div>
+              <div class="gl-press-artist"><a href="https://www.donlouismusic.com/" target="_blank" rel="noopener noreferrer">Don Louis <span class="gl-press-arrow">↗</span></a></div>
               <div class="gl-press-role">Lead Guitarist</div>
             </div>
-            <div class="gl-press-r">Currently on tour.</div>
+            <div class="gl-press-r">Currently on the road.</div>
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist"><a href="https://coffeyanderson.com/" target="_blank" rel="noopener noreferrer">Coffey Anderson</a></div>
+              <div class="gl-press-artist"><a href="https://coffeyanderson.com/" target="_blank" rel="noopener noreferrer">Coffey Anderson <span class="gl-press-arrow">↗</span></a></div>
               <div class="gl-press-role">Lead Guitarist (2nd String)</div>
             </div>
             <div class="gl-press-r">Sub for the main guitarist on occasion.</div>
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist"><a href="https://auramusic.band/" target="_blank" rel="noopener noreferrer">AURA</a></div>
+              <div class="gl-press-artist"><a href="https://auramusic.band/" target="_blank" rel="noopener noreferrer">AURA <span class="gl-press-arrow">↗</span></a></div>
               <div class="gl-press-role">Lead Guitarist</div>
             </div>
             <div class="gl-press-r">Luxury weddings and corporate events.</div>
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist">Local Churches</div>
+              <div class="gl-press-artist">
+                <span class="gl-info-wrap">
+                  Local Churches
+                  <span class="gl-info-trigger">
+                    <button class="gl-info-btn" type="button" aria-expanded="false" aria-label="More info about Local Churches">i</button>
+                    <div class="gl-info-popover gl-info-popover--wide" role="dialog">
+                      <div class="gl-info-eyebrow">PLAYING IN CHURCH SINCE HE WAS 16</div>
+                      <p class="gl-info-body">From 2021 to 2025, Marcus served as Music Director at Converge Church in McKinney. As of 2026, he also plays guitar at Concord Church in Dallas — a 10,000-member congregation with a music ministry that's highly regarded across the Metroplex.</p>
+                    </div>
+                  </span>
+                </span>
+              </div>
               <div class="gl-press-role">Lead Guitarist, Music Director</div>
             </div>
-            <div class="gl-press-r">Serving with the music ministry.</div>
+            <div class="gl-press-r">Playing both CCM & Contemporary Gospel.</div>
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist">Independent Artists</div>
+              <div class="gl-press-artist">
+                <span class="gl-info-wrap">
+                  Independent Artists
+                  <span class="gl-info-trigger">
+                    <button class="gl-info-btn" type="button" aria-expanded="false" aria-label="More info about Independent Artists">i</button>
+                    <div class="gl-info-popover gl-info-popover--wide" role="dialog">
+                      <div class="gl-info-eyebrow">HERE ARE SOME OF THE DALLAS ARTISTS MARCUS HAS WORKED WITH</div>
+                      <div class="gl-info-artist-grid">
+                        <a href="https://www.instagram.com/ac4ever" target="_blank" rel="noopener noreferrer">@ac4ever</a>
+                        <a href="https://www.instagram.com/azanhysn" target="_blank" rel="noopener noreferrer">@azanhysn</a>
+                        <a href="https://www.instagram.com/bemyfiasco" target="_blank" rel="noopener noreferrer">@bemyfiasco</a>
+                        <a href="https://www.instagram.com/dondrianicole" target="_blank" rel="noopener noreferrer">@dondrianicole</a>
+                        <a href="https://www.instagram.com/kjaemusicc" target="_blank" rel="noopener noreferrer">@kjaemusicc</a>
+                        <a href="https://www.instagram.com/lawyerturner" target="_blank" rel="noopener noreferrer">@lawyerturner</a>
+                        <a href="https://www.instagram.com/sallyreneemusic" target="_blank" rel="noopener noreferrer">@sallyreneemusic</a>
+                        <a href="https://www.instagram.com/shyspeaks" target="_blank" rel="noopener noreferrer">@shyspeaks</a>
+                        <a href="https://www.instagram.com/stephencuemusic" target="_blank" rel="noopener noreferrer">@stephencuemusic</a>
+                        <a href="https://www.instagram.com/theleslieaustin" target="_blank" rel="noopener noreferrer">@theleslieaustin</a>
+                        <a href="https://www.instagram.com/tyratiaramusic" target="_blank" rel="noopener noreferrer">@tyratiaramusic</a>
+                        <span class="gl-info-more">...AND MORE</span>
+                      </div>
+                    </div>
+                  </span>
+                </span>
+              </div>
               <div class="gl-press-role">Guitarist, Band Leader</div>
             </div>
             <div class="gl-press-r">Supporting multiple local artists and bands in DFW.</div>
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist"><a href="https://bellosaudio.com/" target="_blank" rel="noopener noreferrer">Bellos Audio</a></div>
+              <div class="gl-press-artist"><a href="https://bellosaudio.com/" target="_blank" rel="noopener noreferrer">Bellos Audio <span class="gl-press-arrow">↗</span></a></div>
               <div class="gl-press-role">Artist</div>
             </div>
             <div class="gl-press-r">The best in-ears I've ever owned.</div>
           </div>
           <div class="gl-press-row">
             <div>
-              <div class="gl-press-artist">MARCIAN ENTERTAINMENT</div>
+              <div class="gl-press-artist">
+                <span class="gl-info-wrap">
+                  MARCIAN ENTERTAINMENT
+                  <span class="gl-info-trigger gl-info-trigger--compact">
+                    <button class="gl-info-btn" type="button" aria-expanded="false" aria-label="More info about MARCIAN ENTERTAINMENT">i</button>
+                    <div class="gl-info-popover gl-info-popover--compact" role="dialog">
+                      <div class="gl-info-eyebrow gl-info-eyebrow--solo">COMING SOON!</div>
+                    </div>
+                  </span>
+                </span>
+              </div>
               <div class="gl-press-role">Owner, Founder</div>
             </div>
             <div class="gl-press-r">An emerging live music entertainment company.</div>
@@ -396,6 +518,35 @@
       rail.addEventListener('scroll', update, { passive: true });
       window.addEventListener('resize', update);
       update();
+    })();
+
+    // Info popovers ("i" buttons) — hover the icon on desktop, tap to toggle on any device
+    (function () {
+      const triggers = Array.from(document.querySelectorAll('.gl-info-trigger'));
+      if (!triggers.length) return;
+
+      function closeAll(except) {
+        triggers.forEach(t => {
+          if (t === except) return;
+          t.classList.remove('is-open');
+          t.querySelector('.gl-info-btn').setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      triggers.forEach(trigger => {
+        const btn = trigger.querySelector('.gl-info-btn');
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpen = trigger.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded', String(isOpen));
+          closeAll(trigger);
+        });
+      });
+
+      document.addEventListener('click', () => closeAll());
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAll();
+      });
     })();
   </script>
 
