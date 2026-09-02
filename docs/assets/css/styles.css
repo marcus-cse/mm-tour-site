@@ -2016,6 +2016,7 @@ button { font-family: inherit; cursor: pointer; }
   .gl-guitars-portrait { height: 320px; }
   .gl-guitars-portrait img { position: static; width: 100%; left: auto; }
   .gl-guitars-topbar > span:nth-child(2) { display: none; }
-  .gl-guitars-lede { grid-template-columns: 1fr; gap: 28px; }
-  .gl-guitars-beats { grid-template-columns: 1fr; gap: 24px; }
+  .gl-guitars-lede { grid-template-columns: 1fr; gap: 28px; padding-bottom: 20px; }
+  .gl-guitars-status { margin-top: 20px; }
+  .gl-guitars-beats { grid-template-columns: 1fr; gap: 24px; padding-top: 0; }
 }
