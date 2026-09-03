@@ -43,8 +43,10 @@
     .tm-stage { flex: 1; min-height: 0; overflow: hidden; }
     #flight-map { width: 100%; height: 100%; }
     @media (max-width: 768px) {
-      html, body { height: auto; overflow: auto; }
+      html { height: auto; overflow: auto; }
+      body { height: auto; overflow: visible; }
       .gl-root.gl-page.tm-page { height: auto; }
+      .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
       .tm-stage { flex: none; overflow: visible; }
       .tm-right { display: flex; flex-direction: column; height: auto; }
       .tm-map-frame { position: relative; height: 320px; flex-shrink: 0; }
@@ -76,6 +78,9 @@
       color: var(--fg);
       flex-shrink: 0;
       border-top: 1px solid var(--hairline);
+    }
+    @media (max-width: 480px) {
+      .gl-home-strip { padding: 10px 20px; font-size: 10px; letter-spacing: 0.08em; }
     }
   </style>
 </head>

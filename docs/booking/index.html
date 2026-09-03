@@ -41,8 +41,10 @@
     .gl-booking-hero { flex: 1; min-height: 0; }
     
     @media (max-width: 768px) {
-      html, body { overflow: auto; }
-      .gl-root.gl-page.gl-booking-simple { overflow: auto; height: auto; }
+      html { overflow: auto; }
+      body { overflow: visible; }
+      .gl-root.gl-page.gl-booking-simple { overflow: visible; height: auto; }
+      .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
     }
   </style>
 </head>
