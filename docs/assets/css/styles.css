@@ -1845,7 +1845,7 @@ button { font-family: inherit; cursor: pointer; }
   position: fixed;
   inset: 0;
   background: var(--bg);
-  z-index: 1000;
+  z-index: 2000;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
