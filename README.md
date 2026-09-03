@@ -20,6 +20,7 @@ I play guitar semi-professionally alongside a full-time career in tech. Between 
 - **Data** — Google Sheets as a live backend. Tour dates are managed in a spreadsheet and fetched at runtime via PapaParse (CSV export). Updating the schedule requires zero code changes.
 - **Design** — Designed in Figma using Claude Design. Warm off-white palette, Anton display type, editorial layout inspired by tour books and concert programs.
 - **Code** — Built and refined with Claude Code. No framework, no bundler — vanilla HTML, CSS, and JS.
+- **Identity** — JSON-LD Person schema and `rel="me"` social links on every page, disambiguating this site from an unrelated recording artist with the same name. Static Open Graph tags per page (not JS-injected) so link previews and crawlers render correctly.
 
 ---
 
@@ -35,7 +36,7 @@ Live show list grouped by month, filterable by artist. Stats strip (shows, citie
 The most complex page — and the one I'm most proud of. An animated Leaflet map that plots the tour route city by city, synced to a "Now Playing" card that cycles through upcoming shows. The route animates stop by stop with a dashed flight-path line and glowing dot markers, then loops.
 
 ### About
-Bio, career timeline (2021–present), and a credits section covering acts and partners.
+Bio, career timeline (2021–present), a guitar collection section telling the story of 13 years as a PRS player, and a credits section covering acts and partners — with expandable details on a few entries (church work, the wider Dallas artist network).
 
 ### Booking
 Single-screen contact page. Email and Instagram. No form — just direct contact.
