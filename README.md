@@ -18,9 +18,23 @@ I play guitar semi-professionally alongside a full-time career in tech. Between 
 
 - **Hosting** — GitHub Pages, deployed from the `docs/` folder. Zero infrastructure.
 - **Data** — Google Sheets as a live backend. Tour dates are managed in a spreadsheet and fetched at runtime via PapaParse (CSV export). Updating the schedule requires zero code changes.
-- **Design** — Designed in Figma using Claude Design. Warm off-white palette, Anton display type, editorial layout inspired by tour books and concert programs.
+- **Design** — Designed with Claude Design. Warm off-white palette, Anton display type, editorial layout inspired by tour books and concert programs.
 - **Code** — Built and refined with Claude Code. No framework, no bundler — vanilla HTML, CSS, and JS.
 - **Identity** — JSON-LD Person schema and `rel="me"` social links on every page, disambiguating this site from an unrelated recording artist with the same name. Static Open Graph tags per page (not JS-injected) so link previews and crawlers render correctly.
+
+---
+
+## Development Workflow
+
+This site is maintained almost entirely through an AI-assisted loop, editor to merged PR:
+
+- **Editor** — VS Code, with the Live Preview extension serving `docs/` locally so changes show up instantly with no build step.
+- **Pair programming** — [Claude Code](https://claude.com/claude-code) (VS Code extension) does the actual implementation — reading the codebase, making edits, running local commands.
+- **Design** — Visual direction comes from Claude Design, then gets implemented directly against that reference.
+- **QA** — Playwright MCP drives a real headless browser to validate changes before they ship: resizing viewports, clicking through flows, taking screenshots. This catches the bugs that are easy to miss by eye — stacking-context conflicts, mobile breakpoint regressions, image downscale aliasing.
+- **Version control** — GitHub CLI (`gh`) handles branch pushes and PR creation from the terminal. Every change gets its own branch (`feat-`, `fix-`, or `chore-` prefixed), a scoped commit, and a PR with a summary and test plan before merging to `main`.
+
+No CI pipeline, no staging environment. The loop is: implement, verify with Playwright, commit, push, open a PR, merge.
 
 ---
 
