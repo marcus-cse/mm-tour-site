@@ -205,7 +205,7 @@
         document.getElementById('stat-regions').textContent = cities;
         document.getElementById('stat-acts').textContent    = acts;
 
-        const artists = [...new Set(allShows.map(s => s.artist))];
+        const artists = [...new Set(allShows.map(s => s.artist))].sort((a, b) => a.localeCompare(b));
         renderFilters(artists, 'All', allShows);
 
         renderGrouped(allShows, allShows);
