@@ -935,7 +935,7 @@ button { font-family: inherit; cursor: pointer; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;
-  padding: 96px 48px;
+  padding: clamp(40px, 6vh, 96px) 48px;
   align-items: center;
   border-bottom: 1px solid var(--hairline);
 }
