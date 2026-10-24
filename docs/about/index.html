@@ -558,6 +558,11 @@
     })();
   </script>
 
+  <div class="gl-scroll-hint" id="scroll-hint">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </div>
   <script>
     const hint = document.getElementById('scroll-hint');
     function checkScroll() {
@@ -567,11 +572,6 @@
     window.addEventListener('scroll', checkScroll, { passive: true });
     checkScroll();
   </script>
-  <div class="gl-scroll-hint" id="scroll-hint">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 9l6 6 6-6"/>
-    </svg>
-  </div>
 
   <script>
     (function() {
