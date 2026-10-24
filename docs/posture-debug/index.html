@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT · © 2026 Marcus Maldonado · https://marcus.band -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Posture Debug — Marcus Maldonado</title>
+  <link rel="icon" href="../assets/img/favicon.ico" sizes="any" />
+  <style>
+    :root { --bg: #F4F2EE; --fg: #0A0A0A; --muted: #6B6862; --line: rgba(10,10,10,0.14); --ok: #1B7F3B; --off: #9A9A9A; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg); }
+    body { font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 16px; }
+    h1 { font-size: 15px; margin: 0 0 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .banner { padding: 12px; border: 1px solid var(--fg); margin-bottom: 16px; font-size: 18px; letter-spacing: 0.08em; text-transform: uppercase; }
+    /* Pure-CSS indicator: this block only changes when the media query itself matches */
+    .css-flag::before { content: "CSS: device-posture NOT matching folded"; color: var(--off); }
+    .css-combo::before { content: "CSS: folded + portrait NOT matching"; color: var(--off); }
+    @media (device-posture: folded) {
+      .css-flag::before { content: "CSS: @media (device-posture: folded) MATCHES"; color: var(--ok); font-weight: 700; }
+      .banner { background: var(--fg); color: var(--bg); }
+    }
+    @media (device-posture: folded) and (orientation: portrait) {
+      .css-combo::before { content: "CSS: @media (device-posture: folded) and (orientation: portrait) MATCHES"; color: var(--ok); font-weight: 700; }
+    }
+    .target { padding: 10px 12px; margin: 0 0 12px; border: 2px solid var(--off); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+    .target.on { border-color: var(--ok); color: var(--ok); font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+    td { padding: 5px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    td:first-child { color: var(--muted); padding-right: 12px; width: 52%; word-break: break-word; }
+    @media (max-width: 560px) {
+      tr { display: block; padding: 5px 0; border-bottom: 1px solid var(--line); }
+      td { display: block; width: auto; border: 0; padding: 0; }
+      td:first-child { width: auto; font-size: 11px; }
+    }
+    .yes { color: var(--ok); font-weight: 700; }
+    .no { color: var(--off); }
+    h2 { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin: 16px 0 6px; }
+    pre { margin: 0 0 16px; padding: 10px; border: 1px solid var(--line); overflow: auto; font-size: 11px; white-space: pre-wrap; word-break: break-all; }
+    #log { max-height: 240px; overflow: auto; }
+    button { font: inherit; padding: 8px 12px; border: 1px solid var(--fg); background: transparent; color: var(--fg); border-radius: 999px; }
+  </style>
+</head>
+<body>
+  <h1>Posture debug</h1>
+  <p>Fold, unfold and rotate the device. Values and the event log update live. Not linked from the site.</p>
+
+  <div class="banner" id="banner">…</div>
+  <div class="target" id="target">…</div>
+  <p class="css-flag" style="margin-bottom:2px"></p>
+  <p class="css-combo"></p>
+
+  <table id="rows"></table>
+
+  <h2>Event log (newest first)</h2>
+  <pre id="log"></pre>
+
+  <h2>Snapshot (JSON)</h2>
+  <pre id="json"></pre>
+  <button id="copy" type="button">Copy snapshot</button>
+
+  <!-- Probes: only resolve when env(viewport-segment-*) is supported; otherwise width stays "auto" -->
+  <div id="probe-w00" style="position:absolute;visibility:hidden;width:env(viewport-segment-width 0 0, 0px);height:env(viewport-segment-height 0 0, 0px)"></div>
+  <div id="probe-w01" style="position:absolute;visibility:hidden;width:env(viewport-segment-width 0 1, 0px);height:env(viewport-segment-height 0 1, 0px)"></div>
+  <div id="probe-w10" style="position:absolute;visibility:hidden;width:env(viewport-segment-width 1 0, 0px);height:env(viewport-segment-height 1 0, 0px)"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const mq = (q) => { try { return window.matchMedia(q).matches; } catch (e) { return null; } };
+    const flag = (v) => v === null ? '<span class="no">query not supported</span>' : v ? '<span class="yes">true</span>' : '<span class="no">false</span>';
+    const rect = (r) => ({ x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) });
+    const logLines = [];
+
+    function snapshot() {
+      const dp = navigator.devicePosture;
+      const segs = window.viewport && window.viewport.segments ? window.viewport.segments.map(rect) : null;
+      const probe = (id) => { const b = $(id).getBoundingClientRect(); return `${Math.round(b.width)}x${Math.round(b.height)}`; };
+      const so = screen.orientation;
+      const portrait = mq('(orientation: portrait)');
+      const folded = dp ? dp.type === 'folded' : mq('(device-posture: folded)');
+      return {
+        'TARGET: folded + portrait (JS)': !!(folded && portrait),
+        posture_api_present: !!dp,
+        'navigator.devicePosture.type': dp ? dp.type : null,
+        'mq (device-posture: folded)': mq('(device-posture: folded)'),
+        'mq (device-posture: continuous)': mq('(device-posture: continuous)'),
+        'mq (horizontal-viewport-segments: 1)': mq('(horizontal-viewport-segments: 1)'),
+        'mq (horizontal-viewport-segments: 2)': mq('(horizontal-viewport-segments: 2)'),
+        'mq (vertical-viewport-segments: 1)': mq('(vertical-viewport-segments: 1)'),
+        'mq (vertical-viewport-segments: 2)': mq('(vertical-viewport-segments: 2)'),
+        'window.viewport present': !!window.viewport,
+        'window.viewport.segments.length': segs ? segs.length : null,
+        'window.viewport.segments': segs,
+        'env segment [col0,row0] w x h': probe('probe-w00'),
+        'env segment [col0,row1] w x h': probe('probe-w01'),
+        'env segment [col1,row0] w x h': probe('probe-w10'),
+        'innerWidth x innerHeight': `${innerWidth} x ${innerHeight}`,
+        'visualViewport w x h': window.visualViewport ? `${Math.round(visualViewport.width)} x ${Math.round(visualViewport.height)}` : null,
+        'screen w x h': `${screen.width} x ${screen.height}`,
+        devicePixelRatio: devicePixelRatio,
+        'mq (orientation: portrait)': portrait,
+        'mq (orientation: landscape)': mq('(orientation: landscape)'),
+        'viewport shape (innerHeight > innerWidth)': innerHeight > innerWidth ? 'portrait' : 'landscape',
+        'screen.orientation.type': so ? so.type : null,
+        'screen.orientation.angle': so ? so.angle : null,
+        userAgent: navigator.userAgent
+      };
+    }
+
+    function render(reason) {
+      const s = snapshot();
+      const type = s['navigator.devicePosture.type'];
+      const orient = s['mq (orientation: portrait)'] === null ? 'orientation unknown' : s['mq (orientation: portrait)'] ? 'portrait' : 'landscape';
+      const postureText = type ? type : (s['mq (device-posture: folded)'] ? 'folded (via CSS)' : 'API not available');
+      $('banner').textContent = `${postureText} · ${orient}`;
+      const hit = s['TARGET: folded + portrait (JS)'];
+      $('target').textContent = hit ? 'Target state: FOLDED + PORTRAIT — active' : 'Target state: folded + portrait — not active';
+      $('target').classList.toggle('on', hit);
+      $('rows').innerHTML = Object.entries(s).map(([k, v]) => {
+        const shown = typeof v === 'boolean' || v === null ? flag(v) : (typeof v === 'object' ? JSON.stringify(v) : String(v));
+        return `<tr><td>${k}</td><td>${shown}</td></tr>`;
+      }).join('');
+      $('json').textContent = JSON.stringify(s, null, 2);
+      if (reason) {
+        const t = new Date().toLocaleTimeString([], { hour12: false });
+        logLines.unshift(`${t}  ${reason}  | posture=${type} segs=${s['window.viewport.segments.length']} ${s['innerWidth x innerHeight']}`);
+        $('log').textContent = logLines.slice(0, 40).join('\n');
+      }
+    }
+
+    if (navigator.devicePosture) navigator.devicePosture.addEventListener('change', () => render('devicePosture change'));
+    ['(device-posture: folded)', '(horizontal-viewport-segments: 2)', '(vertical-viewport-segments: 2)', '(orientation: portrait)'].forEach((q) => {
+      try { window.matchMedia(q).addEventListener('change', () => render(`mq change ${q}`)); } catch (e) {}
+    });
+    if (screen.orientation) screen.orientation.addEventListener('change', () => render('screen.orientation change'));
+    window.addEventListener('resize', () => render('resize'));
+    window.addEventListener('orientationchange', () => render('orientationchange'));
+    if (window.viewport && window.viewport.addEventListener) window.viewport.addEventListener('change', () => render('viewport segments change'));
+
+    $('copy').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText($('json').textContent); $('copy').textContent = 'Copied'; }
+      catch (e) { $('copy').textContent = 'Copy failed: select the JSON above'; }
+    });
+
+    render('load');
+  </script>
+</body>
+</html>
