@@ -43,15 +43,13 @@
   <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png" />
   <script src="../assets/js/head.js"></script>
   <style>
-    html, body { height: 100%; overflow: hidden; }
+    html, body { height: 100%; }
     .gl-nav--page { position: relative; flex-shrink: 0; }
-    .gl-root.gl-page.gl-booking-simple { height: 100%; overflow: hidden; display: flex; flex-direction: column; }
-    .gl-booking-hero { flex: 1; min-height: 0; }
-    
+    /* Fills the viewport when content fits; grows and scrolls when it doesn't */
+    .gl-root.gl-page.gl-booking-simple { min-height: 100%; display: flex; flex-direction: column; }
+    .gl-booking-hero { flex: 1; }
+
     @media (max-width: 768px) {
-      html { overflow: auto; }
-      body { overflow: visible; }
-      .gl-root.gl-page.gl-booking-simple { overflow: visible; height: auto; }
       .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
     }
   </style>
