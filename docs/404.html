@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT · © 2026 Marcus Maldonado · https://marcus.band -->
+<!-- GitHub Pages serves this for any missing path, so every URL here is root-absolute -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Page Not Found — Marcus Maldonado</title>
+  <meta name="description" content="This page isn't on the tour. Find upcoming shows or head back home." />
+  <link rel="icon" href="/assets/img/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-48.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png" />
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
+  <script src="/assets/js/head.js"></script>
+  <style>
+    html, body { height: 100%; }
+    .gl-nav--page { position: relative; flex-shrink: 0; }
+    .gl-root.gl-page.gl-booking-simple { min-height: 100%; display: flex; flex-direction: column; }
+    .gl-booking-hero { flex: 1; }
+
+    /* "Cancelled" show row, borrowed from the tour list */
+    .nf-ticket {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: 20px 0 24px;
+      border-top: 1px solid var(--hairline-strong);
+    }
+    .nf-ticket .gl-row-date { flex-direction: column; align-items: flex-start; gap: 2px; }
+    .nf-ticket .gl-row-private { width: 120px; }
+    .nf-ticket .gl-row-name { margin-bottom: 6px; }
+    .nf-path {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 768px) {
+      .gl-nav--page { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); }
+    }
+    @media (max-width: 480px) {
+      .nf-ticket { grid-template-columns: auto 1fr; gap: 16px 20px; }
+      .nf-ticket .gl-row-private { grid-column: 1 / -1; justify-self: start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="gl-root gl-page gl-booking-simple">
+
+    <!-- Nav -->
+    <header class="gl-nav gl-nav--page">
+      <a href="/" class="gl-mark">MM</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/tour/">Tour</a>
+        <a href="/map/">Map</a>
+        <a href="/about/">About</a>
+      </nav>
+      <a href="/booking/" class="gl-nav-cta">Inquire</a>
+      <button class="gl-nav-toggle" id="nav-toggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+    <div class="gl-nav-overlay" id="nav-overlay">
+      <button class="gl-nav-overlay-close" id="nav-close" aria-label="Close menu">✕</button>
+      <a href="/">Home</a>
+      <a href="/tour/">Tour</a>
+      <a href="/map/">Map</a>
+      <a href="/about/">About</a>
+      <a href="/booking/" class="gl-nav-overlay-cta">Inquire</a>
+    </div>
+
+    <!-- Not found hero -->
+    <section class="gl-booking-hero">
+      <div class="gl-booking-hero-l">
+        <span class="gl-mono gl-booking-eyebrow">— 404 · PAGE NOT FOUND</span>
+        <h1 class="gl-booking-headline">
+          No<br>
+          <em>show</em>.
+        </h1>
+        <p class="gl-booking-sub">
+          Nothing's playing at this address. The link may be old,
+          or the page has moved.
+        </p>
+      </div>
+
+      <div class="gl-booking-hero-r">
+        <div class="nf-ticket">
+          <div class="gl-row-date">
+            <div class="gl-row-day">404</div>
+            <div class="gl-row-mo">ERR</div>
+          </div>
+          <div>
+            <div class="gl-row-name">Page not found</div>
+            <div class="nf-path" id="nf-path"></div>
+          </div>
+          <span class="gl-row-private">CANCELLED</span>
+        </div>
+
+        <div class="gl-contact-block">
+          <div class="gl-mono gl-contact-label">01 — TOUR</div>
+          <a href="/tour/" class="gl-contact-primary">
+            Tour dates <span class="gl-contact-arrow">→</span>
+          </a>
+          <div class="gl-mono gl-contact-meta">SEE WHERE I'M PLAYING NEXT</div>
+        </div>
+
+        <div class="gl-contact-block">
+          <div class="gl-mono gl-contact-label">02 — HOME</div>
+          <a href="/" class="gl-contact-primary">
+            Back home <span class="gl-contact-arrow">→</span>
+          </a>
+          <div class="gl-mono gl-contact-meta">START FROM THE TOP</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="footer-mount"></div>
+
+  </div>
+  <script>
+    document.getElementById('nf-path').textContent = location.pathname;
+  </script>
+  <script src="/assets/js/nav.js"></script>
+  <script src="/assets/js/footer.js"></script>
+</body>
+</html>
