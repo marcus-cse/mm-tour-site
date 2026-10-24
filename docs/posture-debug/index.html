@@ -17,10 +17,16 @@
     .banner { padding: 12px; border: 1px solid var(--fg); margin-bottom: 16px; font-size: 18px; letter-spacing: 0.08em; text-transform: uppercase; }
     /* Pure-CSS indicator: this block only changes when the media query itself matches */
     .css-flag::before { content: "CSS: device-posture NOT matching folded"; color: var(--off); }
+    .css-combo::before { content: "CSS: folded + portrait NOT matching"; color: var(--off); }
     @media (device-posture: folded) {
       .css-flag::before { content: "CSS: @media (device-posture: folded) MATCHES"; color: var(--ok); font-weight: 700; }
       .banner { background: var(--fg); color: var(--bg); }
     }
+    @media (device-posture: folded) and (orientation: portrait) {
+      .css-combo::before { content: "CSS: @media (device-posture: folded) and (orientation: portrait) MATCHES"; color: var(--ok); font-weight: 700; }
+    }
+    .target { padding: 10px 12px; margin: 0 0 12px; border: 2px solid var(--off); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+    .target.on { border-color: var(--ok); color: var(--ok); font-weight: 700; }
     table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
     td { padding: 5px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
     td:first-child { color: var(--muted); padding-right: 12px; width: 52%; word-break: break-word; }
@@ -42,7 +48,9 @@
   <p>Fold, unfold and rotate the device. Values and the event log update live. Not linked from the site.</p>
 
   <div class="banner" id="banner">…</div>
-  <p class="css-flag"></p>
+  <div class="target" id="target">…</div>
+  <p class="css-flag" style="margin-bottom:2px"></p>
+  <p class="css-combo"></p>
 
   <table id="rows"></table>
 
@@ -69,7 +77,11 @@
       const dp = navigator.devicePosture;
       const segs = window.viewport && window.viewport.segments ? window.viewport.segments.map(rect) : null;
       const probe = (id) => { const b = $(id).getBoundingClientRect(); return `${Math.round(b.width)}x${Math.round(b.height)}`; };
+      const so = screen.orientation;
+      const portrait = mq('(orientation: portrait)');
+      const folded = dp ? dp.type === 'folded' : mq('(device-posture: folded)');
       return {
+        'TARGET: folded + portrait (JS)': !!(folded && portrait),
         posture_api_present: !!dp,
         'navigator.devicePosture.type': dp ? dp.type : null,
         'mq (device-posture: folded)': mq('(device-posture: folded)'),
@@ -88,7 +100,11 @@
         'visualViewport w x h': window.visualViewport ? `${Math.round(visualViewport.width)} x ${Math.round(visualViewport.height)}` : null,
         'screen w x h': `${screen.width} x ${screen.height}`,
         devicePixelRatio: devicePixelRatio,
-        orientation: (screen.orientation && screen.orientation.type) || (mq('(orientation: portrait)') ? 'portrait' : 'landscape'),
+        'mq (orientation: portrait)': portrait,
+        'mq (orientation: landscape)': mq('(orientation: landscape)'),
+        'viewport shape (innerHeight > innerWidth)': innerHeight > innerWidth ? 'portrait' : 'landscape',
+        'screen.orientation.type': so ? so.type : null,
+        'screen.orientation.angle': so ? so.angle : null,
         userAgent: navigator.userAgent
       };
     }
@@ -96,7 +112,12 @@
     function render(reason) {
       const s = snapshot();
       const type = s['navigator.devicePosture.type'];
-      $('banner').textContent = type ? `posture: ${type}` : (s['mq (device-posture: folded)'] ? 'posture: folded (via CSS)' : 'posture: API not available');
+      const orient = s['mq (orientation: portrait)'] === null ? 'orientation unknown' : s['mq (orientation: portrait)'] ? 'portrait' : 'landscape';
+      const postureText = type ? type : (s['mq (device-posture: folded)'] ? 'folded (via CSS)' : 'API not available');
+      $('banner').textContent = `${postureText} · ${orient}`;
+      const hit = s['TARGET: folded + portrait (JS)'];
+      $('target').textContent = hit ? 'Target state: FOLDED + PORTRAIT — active' : 'Target state: folded + portrait — not active';
+      $('target').classList.toggle('on', hit);
       $('rows').innerHTML = Object.entries(s).map(([k, v]) => {
         const shown = typeof v === 'boolean' || v === null ? flag(v) : (typeof v === 'object' ? JSON.stringify(v) : String(v));
         return `<tr><td>${k}</td><td>${shown}</td></tr>`;
@@ -110,9 +131,10 @@
     }
 
     if (navigator.devicePosture) navigator.devicePosture.addEventListener('change', () => render('devicePosture change'));
-    ['(device-posture: folded)', '(horizontal-viewport-segments: 2)', '(vertical-viewport-segments: 2)'].forEach((q) => {
+    ['(device-posture: folded)', '(horizontal-viewport-segments: 2)', '(vertical-viewport-segments: 2)', '(orientation: portrait)'].forEach((q) => {
       try { window.matchMedia(q).addEventListener('change', () => render(`mq change ${q}`)); } catch (e) {}
     });
+    if (screen.orientation) screen.orientation.addEventListener('change', () => render('screen.orientation change'));
     window.addEventListener('resize', () => render('resize'));
     window.addEventListener('orientationchange', () => render('orientationchange'));
     if (window.viewport && window.viewport.addEventListener) window.viewport.addEventListener('change', () => render('viewport segments change'));
