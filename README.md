@@ -49,6 +49,8 @@ Live show list grouped by month, filterable by artist. Stats strip (shows, citie
 ### Flight Map
 The most complex page — and the one I'm most proud of. An animated Leaflet map that plots the tour route city by city, synced to a "Now Playing" card that cycles through upcoming shows. The route animates stop by stop with a dashed flight-path line and glowing dot markers, then loops.
 
+**iPhone Duo easter egg:** Partially fold an iPhone Duo in portrait and the page splits at the hinge, with the map on the top screen and a full-size Now Playing card on the bottom. Folding and unfolding plays a frosted-glass blur transition, inspired by the Duo's own opening animation. To try it, turn on **Device Posture API** and **Viewport Segments API** in Settings → Apps → Safari → Advanced → Feature Flags.
+
 ### About
 Bio, career timeline (2021–present), a guitar collection section telling the story of 13 years as a PRS player, and a credits section covering acts and partners — with expandable details on a few entries (church work, the wider Dallas artist network).
 
