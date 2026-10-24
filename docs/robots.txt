@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 # AI / LLM usage policy at /ai.txt
+
+Sitemap: https://marcus.band/sitemap.xml
