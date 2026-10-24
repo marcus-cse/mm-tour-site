@@ -300,3 +300,82 @@
   0%   { transform: scale(0.4); opacity: 0.9; }
   100% { transform: scale(1.6); opacity: 0; }
 }
+
+/* ============================================================
+   iPhone Duo — folded + portrait split (html.duo-folded, set by duo-fold.js)
+   Top half: nav + full-bleed map, ending at the hinge.
+   Bottom half: Now Playing at full size + footer strip.
+   ============================================================ */
+html.duo-folded,
+html.duo-folded body { height: 100%; overflow: hidden; }
+html.duo-folded .gl-root.gl-page.tm-page {
+  --duo-strip-h: 40px;
+  height: var(--duo-vh, 100dvh);
+  display: grid;
+  grid-template-rows:
+    auto
+    minmax(0, 1fr)
+    calc(var(--duo-vh, 100dvh) - var(--duo-fold, 50dvh) - var(--duo-strip-h))
+    var(--duo-strip-h);
+}
+html.duo-folded .tm-stage,
+html.duo-folded .tm-right { display: contents; }
+html.duo-folded .tm-left { display: none; }
+html.duo-folded .gl-nav--page { position: relative; }
+html.duo-folded .tm-map-frame { position: relative; inset: auto; height: 100%; min-height: 0; }
+html.duo-folded .gl-home-strip { height: var(--duo-strip-h); padding: 0 24px; }
+
+html.duo-folded .tm-now {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  padding: 28px 24px;
+  border-top: 0;
+}
+html.duo-folded .tm-now-label { font-size: 11px; margin-bottom: 24px; }
+html.duo-folded .tm-now-row { gap: 28px; }
+html.duo-folded .tm-now-date { padding-right: 28px; }
+html.duo-folded .tm-now-day { font-size: clamp(96px, 24vw, 160px); line-height: 0.85; }
+html.duo-folded .tm-now-mo { font-size: 13px; margin-top: 10px; }
+html.duo-folded .tm-now-artist { font-size: 12px; margin-bottom: 10px; }
+html.duo-folded .tm-now-venue { font-size: clamp(22px, 5vw, 32px); line-height: 1.1; }
+html.duo-folded .tm-now-city { font-size: 15px; margin-top: 6px; }
+html.duo-folded .tm-now-bar { margin-top: 32px; height: 3px; }
+html.duo-folded .tm-now-counter { font-size: 12px; margin-top: 12px; }
+
+/* Fold transition: the screen frosts like glass, the map and card glide
+   to their new halves while blurred, then everything sharpens. */
+html.duo-capture .gl-nav--page { view-transition-name: duo-nav; }
+html.duo-capture .tm-map-frame { view-transition-name: duo-map; }
+html.duo-capture .tm-now { view-transition-name: duo-now; }
+html.duo-capture .gl-home-strip { view-transition-name: duo-strip; }
+
+@keyframes duo-frost-out {
+  to { filter: blur(22px) brightness(1.08); opacity: 0; transform: scale(0.985); }
+}
+@keyframes duo-frost-in {
+  from { filter: blur(22px) brightness(1.08); opacity: 0; transform: scale(1.015); }
+}
+html.duo-capture::view-transition-group(*) {
+  animation-duration: 640ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.duo-capture::view-transition-old(*) {
+  animation: duo-frost-out 300ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+html.duo-capture::view-transition-new(*) {
+  animation: duo-frost-in 560ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+}
+/* The header doesn't move, so it stays sharp */
+html.duo-capture::view-transition-old(duo-nav),
+html.duo-capture::view-transition-new(duo-nav) { animation: none; }
+
+/* Fallback for browsers without View Transitions */
+.gl-root.tm-page { transition: filter 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms cubic-bezier(0.22, 1, 0.36, 1); }
+html.duo-frost .gl-root.tm-page { filter: blur(18px) brightness(1.06); opacity: 0.4; transition-duration: 260ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gl-root.tm-page { transition: none; }
+}
