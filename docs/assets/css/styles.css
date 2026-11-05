@@ -1998,8 +1998,14 @@ button { font-family: inherit; cursor: pointer; }
 .gl-guitars-title { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(44px, 5.3vw, 76px); line-height: 0.9; letter-spacing: -0.025em; margin: 0; }
 .gl-guitars-title em { font-style: normal; -webkit-text-stroke: 1.4px var(--fg); color: transparent; }
 .gl-guitars-lede-r p { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: var(--fg-2); text-wrap: pretty; }
-.gl-guitars-status { font-size: 12.5px; line-height: 1.5; color: var(--fg-2); background: var(--bg-2); border: 1px solid var(--hairline); padding: 16px 18px; margin-top: 12px; }
+.gl-guitars-status { display: flex; align-items: center; gap: 16px; background: #FBFAF7; border: 1.5px solid var(--fg); box-shadow: 6px 6px 0 var(--fg); padding: 14px 18px 14px 14px; margin: 12px 6px 6px 0; }
+.gl-guitars-status-plate { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; width: 104px; height: 92px; background: #000; box-shadow: 0 0 0 3px #FBFAF7, 0 0 0 4.5px var(--fg); margin: 3px; }
+.gl-guitars-status-plate img { width: 88px; height: auto; display: block; }
+.gl-guitars-status-text { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.gl-guitars-status-title { font-family: var(--display); font-size: 27px; line-height: 1; letter-spacing: 0.01em; text-transform: uppercase; color: var(--fg); }
+.gl-guitars-status-note { font-size: 12px; line-height: 1.4; color: var(--fg-2); text-wrap: pretty; }
 .gl-guitars-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: 8px; }
+.gl-guitars-status .gl-guitars-k { font-size: 9.5px; margin-bottom: 0; }
 .gl-guitars-beats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding: 24px 48px 28px; }
 .gl-guitars-beat p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--fg-2); text-wrap: pretty; }
 .gl-guitars-railhead { padding-top: 22px; padding-bottom: 12px; }
@@ -2027,4 +2033,10 @@ button { font-family: inherit; cursor: pointer; }
   .gl-guitars-lede { grid-template-columns: 1fr; gap: 28px; padding-bottom: 20px; }
   .gl-guitars-status { margin-top: 20px; }
   .gl-guitars-beats { grid-template-columns: 1fr; gap: 24px; padding-top: 0; }
+}
+@media (max-width: 480px) {
+  .gl-guitars-status { gap: 12px; padding: 12px 14px 12px 12px; }
+  .gl-guitars-status-plate { width: 84px; height: 76px; }
+  .gl-guitars-status-plate img { width: 70px; }
+  .gl-guitars-status-title { font-size: 24px; }
 }
