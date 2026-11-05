@@ -1,0 +1,264 @@
+{
+  "shows": [
+    {
+      "id": "jm-dtx-tribute",
+      "type": "John Mayer Tribute Night",
+      "client": "JM DTX Tribute",
+      "date": "",
+      "city": "Dallas, TX",
+      "venue": "",
+      "address": "",
+      "downbeat": "",
+      "color": "#254D54",
+      "poster": "assets/img/backstage/jm-dtx-tribute.jpg",
+      "playlist": "https://open.spotify.com/playlist/6VibuDoDlcbO1kLvawwTUb",
+      "summary": "A guitar-forward John Mayer tribute blending blues, funk, Americana, soul and recognizable favorites. Designed for an engaging Dallas night out, with carefully placed instrumental features and an emotional Gravity finale.",
+      "run": [
+        {
+          "label": "Load-in",
+          "value": "TBD"
+        },
+        {
+          "label": "Soundcheck",
+          "value": "TBD"
+        },
+        {
+          "label": "Downbeat",
+          "value": "TBD"
+        },
+        {
+          "label": "Attire",
+          "value": "TBD"
+        }
+      ],
+      "lineup": [
+        {
+          "role": "MD · EG1",
+          "name": "Marcus Maldonado"
+        },
+        {
+          "role": "EG2",
+          "name": "Jamaal Franklin"
+        },
+        {
+          "role": "Bass",
+          "name": "Ricky Fishley"
+        },
+        {
+          "role": "Drums",
+          "name": "Jontue Turner"
+        },
+        {
+          "role": "Vocals",
+          "name": "Corey Breedlove"
+        }
+      ],
+      "notes": "This is going to be a very guitar-forward night, so drums and bass need to stay locked in and focused on the pocket. The goal is to keep things simple and make every song feel great. The live recordings are here as a reference for how these songs have been played in the past, and I took extra care to curate some of my favorite renditions. Let's crush it!",
+      "setlist": [
+        {
+          "title": "Belief",
+          "artist": "John Mayer",
+          "key": "Dm",
+          "bpm": "",
+          "length": "6:12",
+          "image": "https://i.scdn.co/image/ab67616d0000b2735b9c332f9f76cabc137e400f",
+          "audio": "https://archive.org/download/jm2007-12-08.mp3/2-10%20Belief%20%28Live%20in%20Los%20Angeles%20-%20D.mp3",
+          "source": "https://archive.org/details/jm2007-12-08.mp3"
+        },
+        {
+          "title": "Moving On and Getting Over",
+          "artist": "John Mayer",
+          "key": "E",
+          "bpm": "",
+          "length": "7:13",
+          "audio": "https://archive.org/download/JohnMayer2019-09-08.dpa4023.flac24f/JohnMayer2019-09-08.dpa4023.flac24f/JohnMayer2019-09-08.dpa4023.t04.mp3",
+          "source": "https://archive.org/details/JohnMayer2019-09-08.dpa4023.flac24f",
+          "referenceShow": "Houston, TX · 2019-09-08",
+          "referenceTaper": "Justin Kacz",
+          "referenceNotes": "Center FOH; DPA 4023; 24-bit/48 kHz",
+          "audioStatus": "listed_on_archive"
+        },
+        {
+          "title": "Vultures",
+          "artist": "John Mayer",
+          "key": "F#m",
+          "bpm": "",
+          "length": "6:50",
+          "album": "PRS Guitars 40th Anniversary Celebration",
+          "image": "https://i.ytimg.com/vi/GBwHH1MNqIQ/maxresdefault.jpg",
+          "imagePosition": "left",
+          "drive": "1EP4cOI_6qxzp5a6qS90mS67tsU0B1elS",
+          "audio": "",
+          "source": "https://drive.google.com/file/d/1EP4cOI_6qxzp5a6qS90mS67tsU0B1elS/view"
+        },
+        {
+          "title": "Queen of California",
+          "artist": "John Mayer",
+          "key": "B",
+          "bpm": "",
+          "length": "8:18",
+          "album": "John Mayer Live at Crossroads Guitar Festival 2013",
+          "image": "https://m.media-amazon.com/images/I/81wig-10lJL.jpg",
+          "drive": "1n7mxQx2MaFkfAqD4wshMZK89L3ZfPZv4",
+          "audio": "",
+          "source": "https://drive.google.com/file/d/1n7mxQx2MaFkfAqD4wshMZK89L3ZfPZv4/view"
+        },
+        {
+          "title": "Something Like Olivia",
+          "artist": "John Mayer",
+          "key": "G",
+          "bpm": "",
+          "length": "4:18",
+          "album": "John Mayer and The Roots - Something Like Olivia",
+          "youtube": "ZypdQWdLfS8",
+          "youtubeStart": 39,
+          "youtubeEnd": 297,
+          "audio": "",
+          "source": ""
+        },
+        {
+          "title": "Wait Until Tomorrow",
+          "artist": "The Jimi Hendrix Experience",
+          "key": "E",
+          "bpm": "",
+          "length": "4:57",
+          "image": "https://i.scdn.co/image/ab67616d0000b2735b9c332f9f76cabc137e400f",
+          "audio": "https://archive.org/download/jm2007-12-08.mp3/1-07%20Wait%20Till%20Tomorrow%20%28Live%20in%20Los%20A.mp3",
+          "source": "https://archive.org/details/jm2007-12-08.mp3"
+        },
+        {
+          "title": "Wild Blue",
+          "artist": "John Mayer",
+          "key": "Am",
+          "bpm": "",
+          "length": "5:13",
+          "album": "PRS Guitars 40th Anniversary Celebration",
+          "image": "https://i.ytimg.com/vi/GBwHH1MNqIQ/maxresdefault.jpg",
+          "imagePosition": "left",
+          "drive": "1CbSYhY06W-cxH1V2nWeyLCVIZ9YxVV6d",
+          "audio": "",
+          "source": "https://drive.google.com/file/d/1CbSYhY06W-cxH1V2nWeyLCVIZ9YxVV6d/view"
+        },
+        {
+          "title": "Wildfire",
+          "artist": "John Mayer",
+          "key": "Eb",
+          "bpm": "",
+          "length": "4:24",
+          "album": "John Mayer at The iHeartRadio Theater (2013)",
+          "drive": "17D7zJYH0eGhYvAArtRVgCMqAcpc9Deha",
+          "audio": "",
+          "source": "https://drive.google.com/file/d/17D7zJYH0eGhYvAArtRVgCMqAcpc9Deha/view"
+        },
+        {
+          "title": "Still Feel Like Your Man",
+          "artist": "John Mayer",
+          "key": "D",
+          "bpm": "",
+          "length": "4:08",
+          "audio": "https://archive.org/download/JohnMayer2019-09-08.dpa4023.flac24f/JohnMayer2019-09-08.dpa4023.flac24f/JohnMayer2019-09-08.dpa4023.t17.mp3",
+          "source": "https://archive.org/details/JohnMayer2019-09-08.dpa4023.flac24f",
+          "referenceShow": "Houston, TX · 2019-09-08",
+          "referenceTaper": "Justin Kacz",
+          "referenceNotes": "Center FOH; DPA 4023; 24-bit/48 kHz",
+          "audioStatus": "listed_on_archive"
+        },
+        {
+          "title": "Rosie",
+          "artist": "John Mayer",
+          "key": "G",
+          "bpm": "",
+          "length": "6:42",
+          "audio": "https://archive.org/download/JohnMayer2019-09-08.dpa4023.flac24f/JohnMayer2019-09-08.dpa4023.flac24f/JohnMayer2019-09-08.dpa4023.t22.mp3",
+          "source": "https://archive.org/details/JohnMayer2019-09-08.dpa4023.flac24f",
+          "referenceShow": "Houston, TX · 2019-09-08",
+          "referenceTaper": "Justin Kacz",
+          "referenceNotes": "Direct MP3 uses Houston 2019 as playable alternative. Preferred performance remains UBS Arena 2022; its MP3 filename has not been verified.",
+          "alternateReference": {
+            "source": "https://archive.org/details/jm2022-05-07.mkh800twin.flac16/jm2022-05-07t17.flac",
+            "show": "Elmont, NY · 2022-05-07",
+            "taper": "Chris Jones",
+            "notes": "Track 17; center FOH; Sennheiser MKH 800 TWIN; band-preferred reference"
+          },
+          "audioStatus": "listed_on_archive"
+        },
+        {
+          "title": "Ain't No Sunshine",
+          "artist": "Bill Withers",
+          "key": "Gm",
+          "bpm": "",
+          "length": "7:34",
+          "audio": "https://archive.org/download/JohnMayer2010-09-05.dpa4021/JohnMayer2010-09-05.dpa4021.t04.mp3",
+          "source": "https://archive.org/details/JohnMayer2010-09-05.dpa4021",
+          "referenceShow": "The Woodlands, TX · 2010-09-05",
+          "referenceTaper": "Justin Kacz",
+          "referenceNotes": "Track 4; John Mayer live cover; FOH-area DPA 4021 recording",
+          "audioStatus": "listed_on_archive"
+        },
+        {
+          "title": "Crossroads",
+          "artist": "Robert Johnson",
+          "key": "A",
+          "bpm": "",
+          "length": "4:02",
+          "audio": "https://archive.org/download/jm2010-02-26.4015tl.adc2.flac16/jm2010-02-26d2t02.mp3",
+          "source": "https://archive.org/details/jm2010-02-26.4015tl.adc2.flac16"
+        },
+        {
+          "title": "I Don't Trust Myself (With Loving You)",
+          "artist": "John Mayer",
+          "key": "Am",
+          "bpm": "",
+          "length": "10:11",
+          "image": "https://i.scdn.co/image/ab67616d0000b2735b9c332f9f76cabc137e400f",
+          "audio": "https://archive.org/download/jm2007-12-08.mp3/2-09%20I%20Don%27t%20Trust%20Myself%20%28With%20Lovi.mp3",
+          "source": "https://archive.org/details/jm2007-12-08.mp3"
+        },
+        {
+          "title": "Who Says",
+          "artist": "John Mayer",
+          "key": "D",
+          "bpm": "",
+          "length": "5:00",
+          "youtube": "fpxQ6kp8AXQ",
+          "audio": "",
+          "source": ""
+        },
+        {
+          "title": "Slow Dancing in a Burning Room",
+          "artist": "John Mayer",
+          "key": "E",
+          "bpm": "",
+          "length": "6:30",
+          "image": "https://i.scdn.co/image/ab67616d0000b2735b9c332f9f76cabc137e400f",
+          "audio": "https://archive.org/download/jm2007-12-08.mp3/2-04%20Slow%20Dancing%20in%20a%20Burning%20Room%20%28Live%20in%20Lo.mp3",
+          "source": "https://archive.org/details/jm2007-12-08.mp3"
+        },
+        {
+          "title": "Call Me the Breeze",
+          "artist": "J.J. Cale",
+          "key": "G",
+          "bpm": "",
+          "length": "6:37",
+          "album": "PRS Guitars 40th Anniversary Celebration",
+          "image": "https://i.ytimg.com/vi/GBwHH1MNqIQ/maxresdefault.jpg",
+          "imagePosition": "left",
+          "drive": "1DRTWjc-sacfKMmbpcufGGyED_JxTzpvm",
+          "audio": "",
+          "source": "https://drive.google.com/file/d/1DRTWjc-sacfKMmbpcufGGyED_JxTzpvm/view"
+        },
+        {
+          "title": "Gravity",
+          "artist": "John Mayer",
+          "key": "G",
+          "bpm": "",
+          "length": "10:50",
+          "youtube": "6lgpcZxi74Q",
+          "audio": "",
+          "source": ""
+        }
+      ],
+      "audioNotes": "MP3 file paths taken from Archive.org VBR MP3 listings (2010 Woodlands, 2017 Boston, 2019 Atlanta and Houston). Individual audio-byte response inaccessible to browser due to redirected streaming hosts. Six entries have no verified matching MP3 and audio is blank. Rosie and Slow Dancing use verified Houston 2019 playback alternatives; UBS 2022 remains in alternateReference."
+    }
+  ]
+}

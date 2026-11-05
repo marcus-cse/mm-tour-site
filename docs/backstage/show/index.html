@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT · © 2026 Marcus Maldonado · https://marcus.band -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Show — Backstage</title>
+  <link rel="icon" href="../../assets/img/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="48x48" href="../../assets/img/favicon-48.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../../assets/img/favicon-192.png" />
+  <link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png" />
+  <script src="../../assets/js/head.js"></script>
+  <link rel="stylesheet" href="../../assets/css/styles-backstage.css">
+</head>
+<body class="bs-body">
+  <div class="bs-root">
+    <div class="bs-backdrop" aria-hidden="true"></div>
+
+    <header class="bs-header">
+      <a href="../" class="bs-back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+        All shows
+      </a>
+      <a href="../" class="bs-brand">
+        <span class="bs-mark">MM</span>
+        <span class="bs-badge">Backstage</span>
+      </a>
+    </header>
+
+    <main id="bs-main">
+      <div class="bs-status">Loading show…</div>
+    </main>
+
+    <footer class="bs-footer">
+      <span>Marcian Entertainment · Backstage</span>
+      <span>Private link. Keep it in the band.</span>
+    </footer>
+  </div>
+
+  <script src="../../assets/js/backstage.js"></script>
+  <script>
+    const { fmt, esc } = MM.Backstage;
+
+    const ICONS = {
+      play:  '<svg class="bs-icon-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>',
+      pause: '<svg class="bs-icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"></path></svg>',
+      prev:  '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"></path></svg>',
+      next:  '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z"></path></svg>',
+      bars:  '<svg class="bs-icon-bars" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="9" width="3" height="11" rx="1"></rect><rect x="10.5" y="4" width="3" height="16" rx="1"></rect><rect x="17" y="12" width="3" height="8" rx="1"></rect></svg>',
+    };
+
+    function topHTML(s) {
+      const chips = [fmt.date(s.when), s.downbeat && `Downbeat ${s.downbeat}`, fmt.place(s)]
+        .filter(Boolean).map(c => `<span class="bs-chip">${esc(c)}</span>`).join('');
+      const when = s.isPast ? 'Played' : fmt.days(s.daysOut);
+      return `
+        <section class="bs-show-top" aria-label="Show">
+          <div class="bs-show-top-inner">
+            <div class="bs-poster${s.poster ? ' has-img' : ''}" style="${s.art}">
+              <span class="bs-poster-num" aria-hidden="true">${s.num}</span>
+              <span class="bs-poster-text">
+                <span class="bs-poster-client">${esc(s.client)}</span>
+                <span class="bs-poster-title">${esc(s.type)}</span>
+              </span>
+            </div>
+            <div class="bs-show-info">
+              <div class="bs-eyebrow">Show ${s.num} · ${when}</div>
+              <h1 class="bs-show-title">${esc(s.type)}</h1>
+              ${s.summary ? `<p class="bs-show-summary">${esc(s.summary)}</p>` : ''}
+              <div class="bs-chips">${chips}</div>
+              ${s.setlist?.length ? `
+              <div>
+                <button class="bs-btn bs-btn--primary" type="button" id="bs-play-all">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>
+                  Play setlist
+                </button>
+              </div>` : ''}
+            </div>
+          </div>
+        </section>`;
+    }
+
+    // Sum of the tracks' "m:ss" lengths, rounded to the minute: "1 HR 49 MINS"
+    function totalLength(tracks) {
+      const sec = tracks.reduce((sum, t) => {
+        const [m, s] = String(t.length || '').split(':').map(Number);
+        return sum + (isFinite(m) && isFinite(s) ? m * 60 + s : 0);
+      }, 0);
+      const mins = Math.round(sec / 60);
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return [h && `${h} ${h === 1 ? 'HR' : 'HRS'}`, (m || !h) && `${m} ${m === 1 ? 'MIN' : 'MINS'}`].filter(Boolean).join(' ');
+    }
+
+    function setlistHTML(s) {
+      const tracks = s.setlist || [];
+      if (!tracks.length) {
+        return `
+          <section class="bs-setlist" id="setlist" aria-labelledby="set-h">
+            <h2 class="bs-h2" id="set-h">Setlist</h2>
+            <p class="bs-show-summary">Setlist coming soon.</p>
+          </section>`;
+      }
+      const rows = tracks.map((t, i) => `
+        <li>
+          <button class="bs-row" type="button" data-index="${i}">
+            <span class="bs-row-num">${ICONS.bars}<span>${String(i + 1).padStart(2, '0')}</span></span>
+            <span class="bs-row-main">
+              <span class="bs-row-title">${esc(t.title)} <span class="bs-row-artist">· ${esc(t.artist)}</span></span>
+              <span class="bs-row-album">${esc(t.album || '')}</span>
+            </span>
+            <span class="bs-row-cell bs-col-x">${esc(t.key || '—')}</span>
+            <span class="bs-row-cell bs-col-x">${esc(t.bpm || '—')}</span>
+            <span class="bs-row-cell bs-row-cell--time" data-time>${esc(t.length || '—:—')}</span>
+          </button>
+        </li>`).join('');
+      return `
+        <section class="bs-setlist" id="setlist" aria-labelledby="set-h">
+          <div class="bs-shelf-head" style="padding: 0">
+            <h2 class="bs-h2" id="set-h">Setlist</h2>
+            <span class="bs-label">${tracks.length} ${tracks.length === 1 ? 'song' : 'songs'} · ${totalLength(tracks)}</span>
+          </div>
+          <div class="bs-player" style="--bs-poster: ${s.fill}">
+            <div class="bs-player-now">
+              <div class="bs-player-video" id="bs-video" hidden><div id="bs-yt"></div></div>
+              <div class="bs-player-art" aria-hidden="true">
+                <span id="bs-now-num">01</span>
+                <img id="bs-now-img" alt="" hidden>
+              </div>
+              <div class="bs-player-text">
+                <span class="bs-player-label" id="bs-now-label"></span>
+                <span class="bs-player-title" id="bs-now-title"></span>
+                <span class="bs-player-artist" id="bs-now-artist"></span>
+                <span class="bs-player-album" id="bs-now-album"></span>
+              </div>
+            </div>
+            <div class="bs-player-drive" id="bs-drive" hidden></div>
+            <div class="bs-seek-wrap">
+              <input class="bs-seek" id="bs-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+              <div class="bs-times"><span id="bs-elapsed">0:00</span><span id="bs-duration">—:—</span></div>
+            </div>
+            <div class="bs-player-controls">
+              <div class="bs-player-buttons">
+                <button class="bs-ctl" type="button" id="bs-prev" aria-label="Previous song">${ICONS.prev}</button>
+                <button class="bs-ctl bs-ctl--play" type="button" id="bs-toggle" aria-label="Play">${ICONS.play}${ICONS.pause}</button>
+                <button class="bs-ctl" type="button" id="bs-next" aria-label="Next song">${ICONS.next}</button>
+              </div>
+              <a class="bs-source" id="bs-source" href="#" target="_blank" rel="noopener noreferrer" hidden>Open on archive.org ↗</a>
+            </div>
+          </div>
+          <div class="bs-rowhead" aria-hidden="true">
+            <span>#</span><span>Song</span><span class="bs-col-x">Key</span><span class="bs-col-x">BPM</span><span style="text-align: right">Time</span>
+          </div>
+          <ol class="bs-tracks">${rows}</ol>
+        </section>`;
+    }
+
+    function sideHTML(s) {
+      const run = (s.run || []).map(r => `<div><dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd></div>`).join('');
+      const venue = `<div class="bs-run-wide"><dt>Venue</dt><dd>${esc(s.venue || 'TBD')}${s.address ? `<br>${esc(s.address)}` : ''}</dd></div>`;
+      const lineup = (s.lineup || []).map(m => `<li><span class="bs-label">${esc(m.role)}</span><span>${esc(m.name)}</span></li>`).join('');
+      return `
+        <aside class="bs-side" id="run" aria-label="Run of show">
+          <section class="bs-side-section" aria-labelledby="run-h">
+            <h2 class="bs-h2" id="run-h">Run of show</h2>
+            <dl class="bs-run">${run}${venue}</dl>
+          </section>
+          ${lineup ? `
+          <section class="bs-side-section" aria-labelledby="band-h">
+            <h2 class="bs-h2" id="band-h">Band</h2>
+            <ul class="bs-lineup">${lineup}</ul>
+          </section>` : ''}
+          ${s.playlist ? `
+          <section class="bs-refs" aria-labelledby="refs-h">
+            <h2 id="refs-h">Studio references</h2>
+            <p>The original recordings, all in one playlist.</p>
+            <a class="bs-btn" href="${esc(s.playlist)}" target="_blank" rel="noopener noreferrer">Open in Spotify ↗</a>
+          </section>` : ''}
+          ${s.notes ? `
+          <section class="bs-notes" aria-labelledby="notes-h">
+            <h2 id="notes-h">Notes from Marcus</h2>
+            <p>${esc(s.notes)}</p>
+          </section>` : ''}
+        </aside>`;
+    }
+
+    // The archive.org item (recording) a track's audio, or failing that its source page, comes from
+    function itemId(t) {
+      const item = /archive\.org\/(?:download|details)\/([^/?#]+)/.exec(t.audio || t.source || '');
+      return item ? item[1] : '';
+    }
+
+    function artUrl(t) {
+      if (t.image) return t.image;
+      return itemId(t) ? `https://archive.org/services/img/${itemId(t)}` : '';
+    }
+
+    const watchUrl = id => `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`;
+
+    // Album name = the recording's title where it lives: the archive.org item
+    // ("John Mayer Live at UBS Arena on 2022-05-07") or the YouTube video
+    function fetchAlbums(tracks, onAlbum) {
+      const titles = {};
+      tracks.forEach((t, n) => {
+        if (t.album) return;
+        const url = t.youtube ? `https://www.youtube.com/oembed?format=json&url=${encodeURIComponent(watchUrl(t.youtube))}`
+                  : itemId(t) ? `https://archive.org/metadata/${encodeURIComponent(itemId(t))}/metadata` : '';
+        if (!url) return;
+        titles[url] = titles[url] || fetch(url)
+          .then(res => res.json())
+          .then(json => (t.youtube ? json.title : json.result?.title) || '');
+        titles[url]
+          .then(title => { t.album = title; onAlbum(n, title); })
+          .catch(err => console.error(err));
+      });
+    }
+
+    // YouTube's IFrame Player API, behind the same small surface the player uses for <audio>.
+    // The video stays visible (YouTube requires it); our controls drive it.
+    // A track can be a clip of a longer video (youtubeStart/youtubeEnd, in seconds);
+    // time and duration are then reported relative to the clip.
+    function youtubeEngine(mount, { onChange, onEnded, onError }) {
+      let player = null;
+      let ready = null;
+      let ticker = null;
+      let clip = { start: 0, end: 0 };
+      let args = null;
+
+      const api = () => new Promise(resolve => {
+        if (window.YT?.Player) return resolve();
+        const prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => { prev?.(); resolve(); };
+        if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+          const s = document.createElement('script');
+          s.src = 'https://www.youtube.com/iframe_api';
+          document.head.append(s);
+        }
+      });
+
+      function create(autoplay) {
+        return api().then(() => new Promise(resolve => {
+          player = new YT.Player(mount, {
+            host: 'https://www.youtube-nocookie.com',
+            videoId: args.videoId,
+            playerVars: {
+              controls: 0, rel: 0, playsinline: 1, iv_load_policy: 3, autoplay: autoplay ? 1 : 0,
+              start: clip.start, ...(clip.end && { end: clip.end }),
+            },
+            events: {
+              onReady: () => { if (autoplay) player.playVideo(); resolve(player); },
+              onStateChange: e => {
+                clearInterval(ticker);
+                if (e.data === YT.PlayerState.PLAYING) ticker = setInterval(onChange, 250);
+                if (e.data === YT.PlayerState.ENDED) onEnded();
+                onChange();
+              },
+              onError: e => onError(e.data),
+            },
+          });
+        }));
+      }
+
+      return {
+        load(t, autoplay) {
+          clip = { start: Number(t.youtubeStart) || 0, end: Number(t.youtubeEnd) || 0 };
+          args = { videoId: t.youtube, startSeconds: clip.start, ...(clip.end && { endSeconds: clip.end }) };
+          if (!ready) ready = create(autoplay);
+          else ready.then(p => autoplay ? p.loadVideoById(args) : p.cueVideoById(args));
+        },
+        // After a clip ends, playVideo() would resume past it, so reload the clip instead
+        play() { ready?.then(p => p.getPlayerState() === YT.PlayerState.ENDED ? p.loadVideoById(args) : p.playVideo()); },
+        pause() { ready?.then(p => p.pauseVideo()); },
+        seek(sec) { ready?.then(p => p.seekTo(clip.start + sec, true)); },
+        get playing() { return [1, 3].includes(player?.getPlayerState?.()); },
+        get time() { return Math.max(0, (player?.getCurrentTime?.() || 0) - clip.start); },
+        get duration() { return (clip.end || player?.getDuration?.() || NaN) - clip.start; },
+      };
+    }
+
+    function setupPlayer(tracks) {
+      if (!tracks.length) return;
+      const $ = id => document.getElementById(id);
+      const rows = [...document.querySelectorAll('.bs-row')];
+      const audio = new Audio();
+      audio.preload = 'metadata';
+      let idx = 0;
+
+      const yt = youtubeEngine($('bs-yt'), {
+        onChange: sync,
+        onEnded: () => { if (idx < tracks.length - 1) select(idx + 1, true); },
+        onError: () => { tracks[idx].youtubeError = true; sync(); },
+      });
+
+      // A pause or track change while play() is still pending rejects with AbortError; that's expected
+      const playAudio = () => audio.play().catch(err => { if (err.name !== 'AbortError') console.error(err); });
+
+      // One surface over whichever engine the current track uses
+      const isVideo = () => !!tracks[idx].youtube;
+      const engine = {
+        get playing() { return isVideo() ? yt.playing : !audio.paused; },
+        get time() { return isVideo() ? yt.time : audio.currentTime || 0; },
+        get duration() { return isVideo() ? yt.duration : audio.duration; },
+        play() {
+          if (isVideo()) yt.play();
+          else playAudio();
+        },
+        pause() { isVideo() ? yt.pause() : audio.pause(); },
+        seek(sec) {
+          if (!isVideo()) { audio.currentTime = sec; return; }
+          yt.seek(sec);
+          setTimeout(sync, 300); // YouTube reports no time updates while paused
+        },
+      };
+      const playable = t => !!(t.audio || t.youtube) && !t.youtubeError;
+
+      // Items without cover art return a wide waveform strip; keep the number tile for those
+      function setArt(t) {
+        const img = $('bs-now-img');
+        const src = artUrl(t);
+        img.hidden = true;
+        img.style.objectPosition = t.imagePosition || ''; // which part of a non-square image the tile shows
+        img.onload = () => { img.hidden = img.naturalWidth / img.naturalHeight > 2; };
+        img.onerror = () => { img.hidden = true; };
+        if (src) img.src = src;
+        else img.removeAttribute('src');
+      }
+
+      function setLabel() {
+        const t = tracks[idx];
+        const playing = engine.playing;
+        $('bs-now-label').textContent = t.drive ? 'Plays via Google Drive'
+          : t.youtubeError ? 'Video unavailable here'
+          : !playable(t) ? 'No audio yet' : playing ? 'Now playing' : 'Paused';
+        $('bs-seek').disabled = !playable(t);
+        $('bs-toggle').classList.toggle('is-playing', playing);
+        rows.forEach((r, n) => r.classList.toggle('is-playing', n === idx && playing));
+        $('bs-toggle').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+      }
+
+      function setProgress() {
+        const { time, duration } = engine;
+        const pct = duration ? (time / duration) * 100 : 0;
+        $('bs-seek').value = Math.round(pct * 10);
+        $('bs-seek').style.setProperty('--bs-progress', `${pct}%`);
+        $('bs-elapsed').textContent = fmt.time(time);
+        if (duration) setDuration(duration);
+      }
+
+      function setDuration(sec) {
+        const len = fmt.time(sec);
+        $('bs-duration').textContent = len;
+        rows[idx].querySelector('[data-time]').textContent = len;
+      }
+
+      function sync() { setLabel(); setProgress(); }
+
+      function select(i, autoplay) {
+        if (engine.playing) engine.pause();
+        idx = (i + tracks.length) % tracks.length;
+        const t = tracks[idx];
+        const source = t.youtube ? watchUrl(t.youtube) + (t.youtubeStart ? `&t=${Number(t.youtubeStart)}s` : '')
+                     : t.source || t.audio;
+        rows.forEach((r, n) => r.classList.toggle('is-current', n === idx));
+        $('bs-now-num').textContent = String(idx + 1).padStart(2, '0');
+        setArt(t);
+        $('bs-now-title').textContent = t.title || '';
+        $('bs-now-artist').textContent = t.artist || '';
+        $('bs-now-album').textContent = t.album || '';
+        $('bs-duration').textContent = t.length || '—:—';
+        $('bs-source').hidden = !source;
+        $('bs-source').href = source || '#';
+        $('bs-source').textContent = t.youtube ? 'Open on YouTube ↗'
+          : /drive\.google\.com/.test(source || '') ? 'Open in Google Drive ↗' : 'Open on archive.org ↗';
+        $('bs-video').hidden = !t.youtube;
+        document.querySelector('.bs-player').classList.toggle('is-video', !!t.youtube);
+        // Drive won't serve its files to other sites' <audio>, but its own embedded player works.
+        // It has its own play/seek controls, which stand in for ours; clearing it stops playback.
+        $('bs-drive').innerHTML = t.drive
+          ? `<iframe src="https://drive.google.com/file/d/${encodeURIComponent(t.drive)}/preview" allow="autoplay" title="${esc(t.title)} on Google Drive"></iframe>`
+          : '';
+        $('bs-drive').hidden = !t.drive;
+        document.querySelector('.bs-player').classList.toggle('is-drive', !!t.drive);
+        if (t.youtube) {
+          yt.load(t, autoplay);
+        } else if (t.audio) {
+          audio.src = t.audio;
+          if (autoplay) playAudio();
+        } else {
+          audio.removeAttribute('src');
+          audio.load();
+        }
+        sync();
+      }
+
+      audio.addEventListener('play', setLabel);
+      audio.addEventListener('pause', setLabel);
+      audio.addEventListener('timeupdate', setProgress);
+      audio.addEventListener('loadedmetadata', () => setDuration(audio.duration));
+      audio.addEventListener('ended', () => { if (idx < tracks.length - 1) select(idx + 1, true); });
+
+      $('bs-toggle').addEventListener('click', () => {
+        if (!playable(tracks[idx])) return;
+        if (engine.playing) engine.pause();
+        else engine.play();
+      });
+      $('bs-prev').addEventListener('click', () => {
+        if (engine.time > 3) engine.seek(0);
+        else select(idx - 1, engine.playing);
+      });
+      $('bs-next').addEventListener('click', () => select(idx + 1, engine.playing));
+      $('bs-seek').addEventListener('input', e => {
+        if (engine.duration) engine.seek((e.target.value / 1000) * engine.duration);
+      });
+      rows.forEach((r, n) => r.addEventListener('click', () => select(n, true)));
+      $('bs-play-all')?.addEventListener('click', () => {
+        select(0, true);
+        $('setlist').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      select(0, false);
+      fetchAlbums(tracks, (n, title) => {
+        rows[n].querySelector('.bs-row-album').textContent = title;
+        if (n === idx) $('bs-now-album').textContent = title;
+      });
+    }
+
+    const id = new URLSearchParams(location.search).get('id');
+    MM.Backstage.fetch()
+      .then(({ all }) => {
+        const show = all.find(s => s.id === id);
+        if (!show) {
+          document.getElementById('bs-main').innerHTML =
+            '<div class="bs-status">Show not found. <a href="../">Back to all shows</a></div>';
+          return;
+        }
+        document.title = `${show.type} — Backstage`;
+        document.getElementById('bs-main').innerHTML =
+          topHTML(show) + `<div class="bs-show-body">${setlistHTML(show)}${sideHTML(show)}</div>`;
+        setupPlayer(show.setlist || []);
+        if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+      })
+      .catch(err => {
+        document.getElementById('bs-main').innerHTML =
+          '<div class="bs-status">Could not load this show. Please try again later.</div>';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>

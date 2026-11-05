@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT · © 2026 Marcus Maldonado · https://marcus.band -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Backstage — Marcus Maldonado</title>
+  <link rel="icon" href="../assets/img/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="48x48" href="../assets/img/favicon-48.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/img/favicon-192.png" />
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png" />
+  <script src="../assets/js/head.js"></script>
+  <link rel="stylesheet" href="../assets/css/styles-backstage.css">
+</head>
+<body class="bs-body">
+  <div class="bs-root">
+    <div class="bs-backdrop" aria-hidden="true"></div>
+
+    <header class="bs-header">
+      <a href="./" class="bs-brand">
+        <span class="bs-mark">MM</span>
+        <span class="bs-badge">Backstage</span>
+      </a>
+      <div class="bs-label bs-private">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+        <span>Musicians only</span>
+      </div>
+    </header>
+
+    <main id="bs-main">
+      <div class="bs-status">Loading shows…</div>
+    </main>
+
+    <footer class="bs-footer">
+      <span>Marcian Entertainment · Backstage</span>
+      <span>Private link. Keep it in the band.</span>
+    </footer>
+  </div>
+
+  <script src="../assets/js/backstage.js"></script>
+  <script>
+    const { fmt, esc } = MM.Backstage;
+    const showUrl = s => `show/?id=${encodeURIComponent(s.id)}`;
+
+    function heroHTML(s) {
+      return `
+        <section class="bs-hero" aria-label="Next up">
+          <div class="bs-hero-inner">
+            <div class="bs-hero-copy">
+              <div class="bs-eyebrow">Next up · ${fmt.days(s.daysOut)}</div>
+              <h1 class="bs-hero-title">${esc(s.type)}</h1>
+              <div class="bs-hero-meta">
+                ${[fmt.date(s.when), fmt.place(s)].filter(Boolean)
+                  .map(m => `<span>${esc(m)}</span>`).join('<span aria-hidden="true">·</span>')}
+              </div>
+              <div class="bs-hero-actions">
+                <a class="bs-btn bs-btn--primary" href="${showUrl(s)}">Show details</a>
+              </div>
+            </div>
+            <a class="bs-poster${s.poster ? ' has-img' : ''}" href="${showUrl(s)}" style="${s.art}" aria-label="Open ${esc(s.type)}">
+              <span class="bs-poster-num" aria-hidden="true">${s.num}</span>
+              <span class="bs-poster-text">
+                <span class="bs-poster-client">${esc(s.client)}</span>
+                <span class="bs-poster-title">${esc(s.type)}</span>
+              </span>
+            </a>
+          </div>
+        </section>`;
+    }
+
+    function cardHTML(s) {
+      return `
+        <a class="bs-card${s.isPast ? ' bs-card--past' : ''}${s.poster ? ' has-img' : ''}" href="${showUrl(s)}" style="${s.art}">
+          <span class="bs-card-num" aria-hidden="true">${s.num}</span>
+          <span class="bs-card-top">
+            <span>${esc(s.client)}</span>
+            ${s.isPast ? '<span class="bs-card-tag">Played</span>' : ''}
+          </span>
+          <span class="bs-card-bottom">
+            <span class="bs-card-title">${esc(s.type)}</span>
+            <span class="bs-card-meta">${fmt.short(s.when)} · ${esc(s.city)}</span>
+          </span>
+        </a>`;
+    }
+
+    function shelfHTML(id, title, aside, shows, empty) {
+      const body = shows.length
+        ? `<div class="bs-shelf">${shows.map(cardHTML).join('')}</div>`
+        : `<div class="bs-empty">${empty}</div>`;
+      return `
+        <section class="bs-shelf-section" id="${id}" aria-labelledby="${id}-h">
+          <div class="bs-shelf-head">
+            <h2 class="bs-shelf-title" id="${id}-h">${title}</h2>
+            <span class="bs-label">${aside}</span>
+          </div>
+          ${body}
+        </section>`;
+    }
+
+    MM.Backstage.fetch()
+      .then(({ upcoming, past }) => {
+        const count = `${upcoming.length} ${upcoming.length === 1 ? 'show' : 'shows'}`;
+        document.getElementById('bs-main').innerHTML =
+          (upcoming.length ? heroHTML(upcoming[0]) : '') +
+          shelfHTML('upcoming', 'Upcoming', count, upcoming, 'No upcoming shows on the books yet.') +
+          (past.length ? shelfHTML('past', 'Past shows', 'Setlists stay up', past, '') : '');
+      })
+      .catch(err => {
+        document.getElementById('bs-main').innerHTML =
+          '<div class="bs-status">Could not load shows. Please try again later.</div>';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
